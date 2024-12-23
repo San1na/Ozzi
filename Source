@@ -29,7 +29,7 @@ MainSection:NewToggle("Повторять Гемы", "Автоматически
                 }
                 game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Pack"):WaitForChild("[C-S]GetPackRewards"):FireServer(unpack(args))
                 
-                wait(0.01) -- Add a delay to avoid overloading
+                wait(0) -- Add a delay to avoid overloading
             end
         end)
     else
@@ -39,11 +39,11 @@ end)
 
 MainSection:NewButton("🔄Крутить Яйцо🥚", "🔄Крути Гений🔄", function()
     local args = {
-        [1] = "Egg23",
-        [2] = 1
-    }
+    [1] = "Egg23",
+    [2] = 3
+}
 
-    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
 end)
 
 -- Toggle with Repeating Action
@@ -58,12 +58,13 @@ MainSection:NewToggle("Открывать", "п", function(state)
             while isEnabled do
                 -- Execute your repeating action here
                 local args = {
-                    [1] = "Egg23",
-                    [2] = 1
-                }
-                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+    [1] = "Egg23",
+    [2] = 3
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
                 
-                wait(0.01) -- Add a delay to avoid excessive execution (adjust as needed)
+                wait(0) -- Add a delay to avoid excessive execution (adjust as needed)
             end
         end)
     else
@@ -96,7 +97,7 @@ MainSection:NewToggle("Автоматически открывать релик�
                 }
                 game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Ornaments"):WaitForChild("[C-S]PlayerTryDoLuck"):InvokeServer(unpack(args))
                 
-                wait(0.0001) -- Add a delay to avoid overloading
+                wait(0) -- Add a delay to avoid overloading
             end
         end)
     else
@@ -182,7 +183,7 @@ MergaSection:NewToggle("Ну, Крути", "Крутить", function(state)
 end)
 
 local Rebirth = Window:NewTab("💫Перерождения✨")
-local RebirthSection = Rebirth:NewSection("Перерождайся")
+local RebirthSection = Rebirth:NewSection("Открывай уже")
 
 -- Переменные для отслеживания состояний
 local isRebirthActive = false
