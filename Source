@@ -173,10 +173,43 @@ MergaSection:NewToggle("Ну, Крути", "Крутить", function(state)
             while isSpinning do
                 game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Spin"):WaitForChild("[C-S]TrySpin"):InvokeServer()
                 -- Уменьшаем или убираем задержку:
-                wait(0) -- Минимальная задержка для стабильности
+                wait(0.05) -- Минимальная задержка для стабильности
             end
         end)
     else
         print("Выкл")
     end
+end)
+
+local Rebirth = Window:NewTab("Рулетки (Открывать)")
+local RebirthSection = Rebirth:NewSection("Открывай уже")
+
+-- Переменные для отслеживания состояний
+local isRebirthActive = false
+local isSuperRebirthActive = false
+
+-- Кнопка для ручного "Перерождения"
+RebirthSection:NewButton("Перерождение", "Хз", function()
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTryRebirth"):FireServer()
+end)
+
+-- Тумблер для автоматического "Перерождения"
+RebirthSection:NewToggle("Авто Перерождение", "Вкл/Выкл", function(state)
+    isRebirthActive = state
+    if isRebirthActive then
+        print("Перерождение Вкл")
+        spawn(function()
+            while isRebirthActive do
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTryRebirth"):FireServer()
+                wait(0.05) -- Очень быстрая отправка
+            end
+        end)
+    else
+        print("Перерождение Выкл")
+    end
+end)
+
+-- Кнопка для ручного "Супер Перерождения"
+RebirthSection:NewButton("Супер Перерождение", "Хз", function()
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTrySuperRebirth"):FireServer()
 end)
