@@ -173,7 +173,7 @@ MergaSection:NewToggle("Ну, Крути", "Крутить", function(state)
             while isSpinning do
                 game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Spin"):WaitForChild("[C-S]TrySpin"):InvokeServer()
                 -- Уменьшаем или убираем задержку:
-                wait(0.05) -- Минимальная задержка для стабильности
+                wait(0) -- Минимальная задержка для стабильности
             end
         end)
     else
