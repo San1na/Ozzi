@@ -182,7 +182,7 @@ MergaSection:NewToggle("Ну, Крути", "Крутить", function(state)
 end)
 
 local Rebirth = Window:NewTab("💫Перерождения✨")
-local RebirthSection = Rebirth:NewSection("Открывай уже")
+local RebirthSection = Rebirth:NewSection("Перерождайся")
 
 -- Переменные для отслеживания состояний
 local isRebirthActive = false
