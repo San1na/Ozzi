@@ -1,0 +1,182 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Shark Bite Sim", "Ocean")
+
+-- MAIN
+local Main = Window:NewTab("Главное")
+local MainSection = Main:NewSection("Крутки и т.д.")
+
+
+MainSection:NewButton("Гемы", "Получить Гемы", function()
+    local args = {
+        [1] = "Pack_4"
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Pack"):WaitForChild("[C-S]GetPackRewards"):FireServer(unpack(args))
+end)
+
+-- Toggle for Repeating Gems Action
+local isGemsEnabled = false -- State variable for gems toggle
+
+MainSection:NewToggle("Повторять Гемы", "Автоматически получать Гемы", function(state)
+    isGemsEnabled = state -- Update state based on toggle
+    if isGemsEnabled then
+        print("Гемы Вкл")
+        -- Start repeating the function
+        spawn(function() -- Run in a separate thread
+            while isGemsEnabled do
+                local args = {
+                    [1] = "Pack_4"
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Pack"):WaitForChild("[C-S]GetPackRewards"):FireServer(unpack(args))
+                
+                wait(0.01) -- Add a delay to avoid overloading
+            end
+        end)
+    else
+        print("Гемы Выкл")
+    end
+end)
+
+MainSection:NewButton("Крутить Яйцо", "Крути Гений", function()
+    local args = {
+        [1] = "Egg23",
+        [2] = 1
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+end)
+
+-- Toggle with Repeating Action
+local isEnabled = false -- State variable to control the loop
+
+MainSection:NewToggle("Открывать", "п", function(state)
+    isEnabled = state -- Update state based on toggle
+    if isEnabled then
+        print("Вкл")
+        -- Start repeating the function
+        spawn(function() -- Run in a separate thread to avoid freezing
+            while isEnabled do
+                -- Execute your repeating action here
+                local args = {
+                    [1] = "Egg23",
+                    [2] = 1
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Luck"):WaitForChild("[C-S]DoLuck"):InvokeServer(unpack(args))
+                
+                wait(0.01) -- Add a delay to avoid excessive execution (adjust as needed)
+            end
+        end)
+    else
+        print("Выкл")
+    end
+end)
+
+MainSection:NewButton("Открыть Реликвии", "хз", function()
+    local args = {
+        [1] = "6",
+        [2] = 1
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Ornaments"):WaitForChild("[C-S]PlayerTryDoLuck"):InvokeServer(unpack(args))
+end)
+
+-- Toggle for Repeating Relics Action
+local isRelicsEnabled = false -- State variable for relics toggle
+
+MainSection:NewToggle("Повторять Открытие Реликвий", "Автоматически открывать реликвии", function(state)
+    isRelicsEnabled = state -- Update state based on toggle
+    if isRelicsEnabled then
+        print("Открытие Реликвий Вкл")
+        -- Start repeating the function
+        spawn(function() -- Run in a separate thread
+            while isRelicsEnabled do
+                local args = {
+                    [1] = "6",
+                    [2] = 1
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Ornaments"):WaitForChild("[C-S]PlayerTryDoLuck"):InvokeServer(unpack(args))
+                
+                wait(0.0001) -- Add a delay to avoid overloading
+            end
+        end)
+    else
+        print("Открытие Реликвий Выкл")
+    end
+end)
+
+MainSection:NewButton("Получить Крутки", "5 штук и хуету какую-то", function()
+    local args = {
+        [1] = "Pack_3"
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Pack"):WaitForChild("[C-S]GetPackRewards"):FireServer(unpack(args))
+end)
+
+-- Toggle for Repeating Spins Action
+local isSpinsEnabled = false -- State variable for spins toggle
+
+MainSection:NewToggle("Повторять Крутки", "Автоматически получать Крутки", function(state)
+    isSpinsEnabled = state -- Update state based on toggle
+    if isSpinsEnabled then
+        print("Крутки Вкл")
+        -- Start repeating the function
+        spawn(function() -- Run in a separate thread
+            while isSpinsEnabled do
+                local args = {
+                    [1] = "Pack_3"
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Pack"):WaitForChild("[C-S]GetPackRewards"):FireServer(unpack(args))
+                
+                wait(0.01) -- Add a delay to avoid overloading
+            end
+        end)
+    else
+        print("Крутки Выкл")
+    end
+end)
+
+MainSection:NewButton("Получить Победы", "50 млн", function()
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("SurpriseGift"):WaitForChild("[C-S]GetSurpriseGift"):FireServer()
+end)
+
+local isToggled = false -- Переменная для отслеживания состояния тумблера
+
+MainSection:NewToggle("Получай", "Получай", function(state)
+    isToggled = state
+    if isToggled then
+        print("Вкл")
+        spawn(function() -- Создаем новый поток, чтобы не блокировать основную программу
+            while isToggled do
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("SurpriseGift"):WaitForChild("[C-S]GetSurpriseGift"):FireServer()
+                wait(0.01) -- Задержка между отправками (избегает перегрузки сервера)
+            end
+        end)
+    else
+        print("Выкл")
+    end
+end)
+
+local Merga = Window:NewTab("Рулетки (Открывать)")
+local MergaSection = Merga:NewSection("Открывай уже")
+
+
+MergaSection:NewButton("Крутить Колесо", "Хз", function()
+    game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Spin"):WaitForChild("[C-S]TrySpin"):InvokeServer()
+end)
+
+local isSpinning = false -- Переменная для отслеживания состояния тумблера
+
+MergaSection:NewToggle("Ну, Крути", "Крутить", function(state)
+    isSpinning = state
+    if isSpinning then
+        print("Вкл")
+        spawn(function()
+            while isSpinning do
+                game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Spin"):WaitForChild("[C-S]TrySpin"):InvokeServer()
+                -- Уменьшаем или убираем задержку:
+                wait(0.05) -- Минимальная задержка для стабильности
+            end
+        end)
+    else
+        print("Выкл")
+    end
+end)
