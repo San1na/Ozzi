@@ -1,12 +1,12 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Shark Bite Sim", "Ocean")
+local Window = Library.CreateLib("🦈Shark Bite Simulator🌊", "Ocean")
 
 -- MAIN
 local Main = Window:NewTab("Главное")
 local MainSection = Main:NewSection("Крутки и т.д.")
 
 
-MainSection:NewButton("Гемы", "Получить Гемы", function()
+MainSection:NewButton("💎Гемы💎", "💎Получить Гемы💎", function()
     local args = {
         [1] = "Pack_4"
     }
@@ -37,7 +37,7 @@ MainSection:NewToggle("Повторять Гемы", "Автоматически
     end
 end)
 
-MainSection:NewButton("Крутить Яйцо", "Крути Гений", function()
+MainSection:NewButton("🔄Крутить Яйцо🥚", "🔄Крути Гений🔄", function()
     local args = {
         [1] = "Egg23",
         [2] = 1
@@ -71,7 +71,7 @@ MainSection:NewToggle("Открывать", "п", function(state)
     end
 end)
 
-MainSection:NewButton("Открыть Реликвии", "хз", function()
+MainSection:NewButton("🔮Открыть Реликвии🔮", "хз", function()
     local args = {
         [1] = "6",
         [2] = 1
@@ -83,10 +83,10 @@ end)
 -- Toggle for Repeating Relics Action
 local isRelicsEnabled = false -- State variable for relics toggle
 
-MainSection:NewToggle("Повторять Открытие Реликвий", "Автоматически открывать реликвии", function(state)
+MainSection:NewToggle("Автоматически открывать реликвии", "Автоматически открывать реликвии", function(state)
     isRelicsEnabled = state -- Update state based on toggle
     if isRelicsEnabled then
-        print("Открытие Реликвий Вкл")
+        print("Открытие 🔮Реликвий🔮 Вкл")
         -- Start repeating the function
         spawn(function() -- Run in a separate thread
             while isRelicsEnabled do
@@ -100,11 +100,11 @@ MainSection:NewToggle("Повторять Открытие Реликвий", "�
             end
         end)
     else
-        print("Открытие Реликвий Выкл")
+        print("Открытие 🔮Реликвий🔮 Выкл")
     end
 end)
 
-MainSection:NewButton("Получить Крутки", "5 штук и хуету какую-то", function()
+MainSection:NewButton("🌈🎡Получить Крутки🌈🎡", "5 штук и хуету какую-то", function()
     local args = {
         [1] = "Pack_3"
     }
@@ -114,7 +114,7 @@ end)
 -- Toggle for Repeating Spins Action
 local isSpinsEnabled = false -- State variable for spins toggle
 
-MainSection:NewToggle("Повторять Крутки", "Автоматически получать Крутки", function(state)
+MainSection:NewToggle("Автоматически получать Крутки", "Автоматически получать Крутки", function(state)
     isSpinsEnabled = state -- Update state based on toggle
     if isSpinsEnabled then
         print("Крутки Вкл")
@@ -134,7 +134,7 @@ MainSection:NewToggle("Повторять Крутки", "Автоматичес
     end
 end)
 
-MainSection:NewButton("Получить Победы", "50 млн", function()
+MainSection:NewButton("🏆Получить Победы🏆", "50 млн", function()
     game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("SurpriseGift"):WaitForChild("[C-S]GetSurpriseGift"):FireServer()
 end)
 
@@ -155,11 +155,11 @@ MainSection:NewToggle("Получай", "Получай", function(state)
     end
 end)
 
-local Merga = Window:NewTab("Рулетки (Открывать)")
+local Merga = Window:NewTab("🔄Рулетки (Открывать)🔄")
 local MergaSection = Merga:NewSection("Открывай уже")
 
 
-MergaSection:NewButton("Крутить Колесо", "Хз", function()
+MergaSection:NewButton("🔄🎡Крутить Колесо🔄🎡", "Хз", function()
     game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Function"):WaitForChild("Spin"):WaitForChild("[C-S]TrySpin"):InvokeServer()
 end)
 
@@ -181,7 +181,7 @@ MergaSection:NewToggle("Ну, Крути", "Крутить", function(state)
     end
 end)
 
-local Rebirth = Window:NewTab("Рулетки (Открывать)")
+local Rebirth = Window:NewTab("💫Перерождения✨")
 local RebirthSection = Rebirth:NewSection("Открывай уже")
 
 -- Переменные для отслеживания состояний
@@ -189,15 +189,15 @@ local isRebirthActive = false
 local isSuperRebirthActive = false
 
 -- Кнопка для ручного "Перерождения"
-RebirthSection:NewButton("Перерождение", "Хз", function()
+RebirthSection:NewButton("💫Перерождение✨", "Хз", function()
     game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTryRebirth"):FireServer()
 end)
 
 -- Тумблер для автоматического "Перерождения"
-RebirthSection:NewToggle("Авто Перерождение", "Вкл/Выкл", function(state)
+RebirthSection:NewToggle("Авто 💫Перерождение✨", "Вкл/Выкл", function(state)
     isRebirthActive = state
     if isRebirthActive then
-        print("Перерождение Вкл")
+        print("💫Перерождение✨ Вкл")
         spawn(function()
             while isRebirthActive do
                 game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTryRebirth"):FireServer()
@@ -205,11 +205,11 @@ RebirthSection:NewToggle("Авто Перерождение", "Вкл/Выкл",
             end
         end)
     else
-        print("Перерождение Выкл")
+        print("💫Перерождение✨ Выкл")
     end
 end)
 
 -- Кнопка для ручного "Супер Перерождения"
-RebirthSection:NewButton("Супер Перерождение", "Хз", function()
+RebirthSection:NewButton("Супер 💫Перерождение✨", "Хз", function()
     game:GetService("ReplicatedStorage"):WaitForChild("Remote"):WaitForChild("Event"):WaitForChild("Eco"):WaitForChild("[C-S]PlayerTrySuperRebirth"):FireServer()
 end)
