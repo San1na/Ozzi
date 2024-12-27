@@ -9,11 +9,6 @@ MainSection:NewKeybind("Вкл-Выкл Меню", ".", Enum.KeyCode.Y, function
     Library:ToggleUI()
 end)
 
-MainSection:NewButton("Кликер", "ButtonInfo", function()
-        getgenv().key = "Hostile"
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/The-telligence/main/MC%20KSystem%202"))()
-end)
-
 -- Функция для покупки
 local function purchaseAll()
     -- Покупки StandardMerchant
@@ -341,4 +336,9 @@ while true do
 
 		timerlabel.Text = saat..":"..dakika..":"..saniye
 	end
+end)
+
+MainSection:NewButton("Кликер", "ButtonInfo", function()
+        getgenv().key = "Hostile"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/The-telligence/main/MC%20KSystem%202"))()
 end)
