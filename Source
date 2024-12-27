@@ -10,42 +10,54 @@ MainSection:NewKeybind("Вкл-Выкл Меню", ".", Enum.KeyCode.Y, function
 end)
 
 -- Функция для покупки
-local function purchaseItems()
+local function purchaseAll()
+    -- Покупки StandardMerchant
     for i = 1, 6 do
-        local args = {
-            [1] = "IceFishingMerchant",
-            [2] = i
-        }
+        local args = { [1] = "StandardMerchant", [2] = i }
         game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+        wait(0.2) -- Задержка для стабильности
+    end
+
+    -- Покупка PotionVendingMachine
+    local args = { [1] = "PotionVendingMachine" }
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("VendingMachines_Purchase"):InvokeServer(unpack(args))
+    wait(0.2)
+
+    -- Покупки IceFishingMerchant
+    for i = 1, 6 do
+        local args = { [1] = "IceFishingMerchant", [2] = i }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+        wait(0.2)
+    end
+
+    -- Покупки FishingMerchant
+    for i = 1, 6 do
+        local args = { [1] = "FishingMerchant", [2] = i }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+        wait(0.2)
     end
 end
 
--- Кнопка для одиночной покупки
-MainSection:NewButton("Купить", "ButtonInfo", function()
-    purchaseItems()
+-- Кнопка для разовой покупки
+MainSection:NewButton("Все Мерчанты", "Купить всё сразу", function()
+    purchaseAll()
 end)
 
--- Переменная для отслеживания состояния
-local autoPurchasing = false
+-- Автоматическая покупка
+MainSection:NewToggle("Полностью Авто", "Покупать автоматически", function(state)
+    _G.AutoPurchase = state
 
--- Тоггл для автоматической покупки
-MainSection:NewToggle("Автопокупка", "Включить/выключить автоматическую покупку", function(state)
-    autoPurchasing = state
-    if autoPurchasing then
-        print("Автопокупка Вкл")
+    if state then
         spawn(function()
-            while autoPurchasing do
-                purchaseItems()
-                wait(1) -- Интервал между покупками, регулируйте по необходимости
+            while _G.AutoPurchase do
+                purchaseAll()
+                wait(5) -- Интервал между циклами
             end
         end)
     else
-        print("Автопокупка Выкл")
+        _G.AutoPurchase = false
     end
 end)
-
--- Переменная для управления автоматизацией
-local autoUse = false
 
 MainSection:NewButton("Анти-Афк", "ButtonInfo", function()
         repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
