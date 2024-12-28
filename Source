@@ -338,7 +338,78 @@ while true do
 	end
 end)
 
-MainSection:NewButton("Кликер", "ButtonInfo", function()
-        getgenv().key = "Hostile"
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/The-telligence/main/MC%20KSystem%202"))()
+-- Координаты точек маршрута
+local waypoints = {
+    Vector3.new(-57.6325569152832, 1.1315479278564453, -263.0588073730469),
+    Vector3.new(44.32969284057617, 1.1315479278564453, -262.3301696777344),
+    Vector3.new(44.249820709228516, 1.1315479278564453, -253.3031463623047),
+    Vector3.new(-58.403133392333984, 1.1315479278564453, -247.22683715820312),
+    Vector3.new(58.383785247802734, 1.1315481662750244, -248.6360321044922),
+    Vector3.new(58.649234771728516, 1.1315479278564453, -243.88446044921875),
+    Vector3.new(-58.03598403930664, 1.1315479278564453, -236.05001831054688),
+    Vector3.new(52.22842788696289, 1.1315479278564453, -229.02828979492188),
+    Vector3.new(-59.37076950073242, 1.1315479278564453, -231.0557861328125),
+    Vector3.new(-53.91551208496094, 1.1315479278564453, -223.91134643554688),
+    Vector3.new(53.21174621582031, 1.1315481662750244, -224.81887817382812),
+    Vector3.new(49.90229797363281, 1.1315479278564453, -219.4945831298828),
+    Vector3.new(-49.938255310058594, 1.1315479278564453, -218.626953125),
+    Vector3.new(-49.81672286987305, 1.1315479278564453, -212.24859619140625),
+    Vector3.new(45.582767486572266, 1.1315479278564453, -212.31988525390625),
+    Vector3.new(45.38035583496094, 1.4913029670715332, -203.5441436767578),
+    Vector3.new(-51.24186325073242, 1.1315476894378662, -206.30294799804688),
+    Vector3.new(-45.70230484008789, 1.1315479278564453, -203.5212860107422),
+    Vector3.new(36.373207092285156, 1.1315479278564453, -201.14288330078125),
+    Vector3.new(-41.25272750854492, 1.1315479278564453, -199.62635803222656)
+}
+
+-- Флаг для повторения маршрута
+local isRunning = false
+
+-- Функция для телепортации игрока
+local function teleportPlayer(player, position)
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(position)
+    end
+end
+
+-- Функция для перемещения игрока
+local function moveToPosition(player, position)
+    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local humanoid = player.Character:FindFirstChild("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = 50
+            humanoid:MoveTo(position)
+            humanoid.MoveToFinished:Wait()
+        end
+    end
+end
+
+-- Функция для выполнения маршрута
+local function runRoute(player)
+    while isRunning do
+        -- Телепортируем на первую точку
+        teleportPlayer(player, waypoints[1])
+        wait(0.2)
+
+        -- Проходим через все остальные точки
+        for i = 2, #waypoints do
+            moveToPosition(player, waypoints[i])
+            wait(0.1)
+        end
+
+        print("Маршрут завершён. Перезапуск...")
+        wait(1)
+    end
+end
+
+-- Кнопка для запуска/остановки маршрута
+MainSection:NewButton("Запустить/Остановить маршрут", "Начинает или останавливает движение", function()
+    isRunning = not isRunning
+    if isRunning then
+        print("Маршрут запущен.")
+        local player = game.Players.LocalPlayer
+        coroutine.wrap(runRoute)(player)
+    else
+        print("Маршрут остановлен.")
+    end
 end)
