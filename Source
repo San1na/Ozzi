@@ -9,6 +9,26 @@ MainSection:NewKeybind("Вкл-Выкл Меню", ".", Enum.KeyCode.Y, function
     Library:ToggleUI()
 end)
 
+local isRolling = false  -- This variable will control the rolling state
+
+-- Button for the "Ролл" action (not needed for repeating roll)
+MainSection:NewButton("Ролл", "", function()
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
+end)
+
+-- Toggle for starting and stopping the rolling action
+MainSection:NewToggle("Ролл каждый 0.5 сек", "Активировать или деактивировать", function(state)
+    isRolling = state  -- Set rolling state based on toggle
+
+    if isRolling then
+        -- Start the rolling loop
+        while isRolling do
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
+            wait(0.5)  -- Delay of 0.5 seconds
+        end
+    end
+end)
+
 -- Функция для покупки
 local function purchaseAll()
     -- Покупки StandardMerchant
