@@ -403,7 +403,7 @@ local function runRoute(player)
 end
 
 -- Кнопка для запуска/остановки маршрута
-MainSection:NewButton("Запустить/Остановить маршрут", "Начинает или останавливает движение", function()
+MainSection:NewButton("Запустить/Остановить маршрут То-есть Фарм Вечеринки", "Начинает или останавливает движение", function()
     isRunning = not isRunning
     if isRunning then
         print("Маршрут запущен.")
