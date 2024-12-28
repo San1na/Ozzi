@@ -365,22 +365,23 @@ local waypoints = {
 -- Флаг для повторения маршрута
 local isRunning = false
 
--- Функция для телепортации игрока
-local function teleportPlayer(player, position)
-    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character.HumanoidRootPart.CFrame = CFrame.new(position)
-    end
-end
+-- TweenService для плавного перемещения
+local TweenService = game:GetService("TweenService")
 
 -- Функция для перемещения игрока
-local function moveToPosition(player, position)
+local function moveToPosition(player, position, duration)
     if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        local humanoid = player.Character:FindFirstChild("Humanoid")
-        if humanoid then
-            humanoid.WalkSpeed = 50
-            humanoid:MoveTo(position)
-            humanoid.MoveToFinished:Wait()
-        end
+        local humanoidRootPart = player.Character.HumanoidRootPart
+
+        -- Создаём Tween
+        local tweenInfo = TweenInfo.new(
+            duration, -- Длительность
+            Enum.EasingStyle.Linear, -- Линейное движение
+            Enum.EasingDirection.Out
+        )
+        local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = CFrame.new(position)})
+        tween:Play()
+        tween.Completed:Wait() -- Ждём завершения движения
     end
 end
 
@@ -388,13 +389,13 @@ end
 local function runRoute(player)
     while isRunning do
         -- Телепортируем на первую точку
-        teleportPlayer(player, waypoints[1])
-        wait(0.2)
+        if waypoints[1] then
+            moveToPosition(player, waypoints[1], 0.1) -- Телепорт как быстрое перемещение
+        end
 
         -- Проходим через все остальные точки
         for i = 2, #waypoints do
-            moveToPosition(player, waypoints[i])
-            wait(0.1)
+            moveToPosition(player, waypoints[i], 1) -- Плавное перемещение с Tween
         end
 
         print("Маршрут завершён. Перезапуск...")
@@ -403,7 +404,7 @@ local function runRoute(player)
 end
 
 -- Кнопка для запуска/остановки маршрута
-MainSection:NewButton("Запустить/Остановить маршрут То-есть Фарм Вечеринки", "Начинает или останавливает движение", function()
+MainSection:NewButton("Запустить/Остановить маршрут", "Начинает или останавливает движение", function()
     isRunning = not isRunning
     if isRunning then
         print("Маршрут запущен.")
@@ -412,4 +413,58 @@ MainSection:NewButton("Запустить/Остановить маршрут Т
     else
         print("Маршрут остановлен.")
     end
+end)
+
+local Boss42 = Window:NewTab("Доп")
+local Boss42Section = Boss42:NewSection(".")
+
+-- Функция для блокировки движения
+local function blockMovement()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    humanoid.PlatformStand = true  -- Останавливает движение
+end
+
+-- Функция для разблокировки движения
+local function unblockMovement()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    humanoid.PlatformStand = false  -- Разблокирует движение
+end
+
+-- Функция для телепортации на координаты (-27, 3, -20)
+local function teleport()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    -- Телепорт на координаты (-27, 3, -20)
+    humanoidRootPart.CFrame = CFrame.new(-27, 3, -20)
+
+    blockMovement()  -- Блокируем движение после телепортации
+end
+
+-- Функция для телепортации чуть выше и восстановление возможности двигаться
+local function teleportUp()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    -- Телепортируем немного выше по оси Y (например, на 10 единиц выше)
+    humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position.X, humanoidRootPart.Position.Y + 10, humanoidRootPart.Position.Z)
+
+    unblockMovement()  -- Восстанавливаем возможность двигаться
+end
+
+-- Создание кнопок в меню
+Boss42Section:NewButton("Телепортироваться на -27, 3, -20", "Телепортирует на заданные координаты", function()
+    teleport()
+end)
+
+Boss42Section:NewButton("Телепортироваться выше и двигаться", "Телепортирует немного выше и позволяет двигаться", function()
+    teleportUp()
 end)
