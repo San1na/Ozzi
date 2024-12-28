@@ -79,18 +79,6 @@ MainSection:NewToggle("Полностью Авто", "Покупать авто�
     end
 end)
 
-MainSection:NewButton("Ролл", "", function()
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
-end)
-
-MainSection:NewToggle(".", ".", function(state)
-    if state then
-        print(".")
-    else
-        print(".")
-    end
-end)
-
 MainSection:NewButton("Анти-Афк", "ButtonInfo", function()
         repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
 
