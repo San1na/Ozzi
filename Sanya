@@ -438,57 +438,6 @@ end)
 local Boss42 = Window:NewTab("Доп")
 local Boss42Section = Boss42:NewSection(".")
 
--- Функция для блокировки движения
-local function blockMovement()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
-    
-    humanoid.PlatformStand = true  -- Останавливает движение
-end
-
--- Функция для разблокировки движения
-local function unblockMovement()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
-    
-    humanoid.PlatformStand = false  -- Разблокирует движение
-end
-
--- Функция для телепортации на координаты (-27, 3, -20)
-local function teleport()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    
-    -- Телепорт на координаты (-27, 3, -20)
-    humanoidRootPart.CFrame = CFrame.new(-27, 3, -20)
-
-    blockMovement()  -- Блокируем движение после телепортации
-end
-
--- Функция для телепортации чуть выше и восстановление возможности двигаться
-local function teleportUp()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    
-    -- Телепортируем немного выше по оси Y (например, на 10 единиц выше)
-    humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position.X, humanoidRootPart.Position.Y + 10, humanoidRootPart.Position.Z)
-
-    unblockMovement()  -- Восстанавливаем возможность двигаться
-end
-
--- Создание кнопок в меню
-Boss42Section:NewButton("Телепортироваться на -27, 3, -20", "Телепортирует на заданные координаты", function()
-    teleport()
-end)
-
-Boss42Section:NewButton("Телепортироваться выше и двигаться", "Телепортирует немного выше и позволяет двигаться", function()
-    teleportUp()
-end)
-
 Boss42Section:NewButton("ServerHop", "", function()
         local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
