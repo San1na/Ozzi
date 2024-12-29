@@ -5,6 +5,13 @@ local Window = Library.CreateLib(".", "Serpent")
 local Main = Window:NewTab("Главное")
 local MainSection = Main:NewSection("Наживка")
 
+local isRolling = false  -- This variable will control the rolling state
+
+-- Button for the "Ролл" action (not needed for repeating roll)
+MainSection:NewButton("Ролл", "", function()
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
+end)
+
 MainSection:NewKeybind("Вкл-Выкл Меню", ".", Enum.KeyCode.Y, function()
     Library:ToggleUI()
 end)
