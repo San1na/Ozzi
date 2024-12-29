@@ -523,5 +523,15 @@ Boss42Section:NewToggle("Рыбачить Везде", "Активировать
     end
 end)
 
--- Показываем меню
-Window:Display()
+local CurrentFPS = 60
+
+-- Функция для изменения FPS
+local function ChangeFPS(value)
+    CurrentFPS = value
+    setfflag("TaskSchedulerTargetFps", tostring(value))
+    print("FPS limit set to:", value)
+end
+
+Boss42Section:NewSlider("FPS Limit", "Adjust the maximum FPS", 144, 15, function(value) 
+    ChangeFPS(value)
+end)
