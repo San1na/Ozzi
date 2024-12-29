@@ -1,4 +1,5 @@
-
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib(".", "Serpent")
 
 -- MAIN
 local Main = Window:NewTab("Главное")
@@ -359,26 +360,35 @@ end)
 
 -- Координаты точек маршрута
 local waypoints = {
-    Vector3.new(-57.6325569152832, 1.1315479278564453, -263.0588073730469),
-    Vector3.new(44.32969284057617, 1.1315479278564453, -262.3301696777344),
-    Vector3.new(44.249820709228516, 1.1315479278564453, -253.3031463623047),
-    Vector3.new(-58.403133392333984, 1.1315479278564453, -247.22683715820312),
-    Vector3.new(58.383785247802734, 1.1315481662750244, -248.6360321044922),
-    Vector3.new(58.649234771728516, 1.1315479278564453, -243.88446044921875),
-    Vector3.new(-58.03598403930664, 1.1315479278564453, -236.05001831054688),
-    Vector3.new(52.22842788696289, 1.1315479278564453, -229.02828979492188),
-    Vector3.new(-59.37076950073242, 1.1315479278564453, -231.0557861328125),
-    Vector3.new(-53.91551208496094, 1.1315479278564453, -223.91134643554688),
-    Vector3.new(53.21174621582031, 1.1315481662750244, -224.81887817382812),
-    Vector3.new(49.90229797363281, 1.1315479278564453, -219.4945831298828),
-    Vector3.new(-49.938255310058594, 1.1315479278564453, -218.626953125),
-    Vector3.new(-49.81672286987305, 1.1315479278564453, -212.24859619140625),
-    Vector3.new(45.582767486572266, 1.1315479278564453, -212.31988525390625),
-    Vector3.new(45.38035583496094, 1.4913029670715332, -203.5441436767578),
-    Vector3.new(-51.24186325073242, 1.1315476894378662, -206.30294799804688),
-    Vector3.new(-45.70230484008789, 1.1315479278564453, -203.5212860107422),
-    Vector3.new(36.373207092285156, 1.1315479278564453, -201.14288330078125),
-    Vector3.new(-41.25272750854492, 1.1315479278564453, -199.62635803222656)
+    Vector3.new(-52.532596588134766, 1.1315479278564453, -272.5875549316406),
+    Vector3.new(38.75706481933594, 1.1315479278564453, -272.37945556640625),
+    Vector3.new(-60.0663948059082, 1.1315479278564453, -265.6180419921875),
+    Vector3.new(54.04348373413086, 1.1315479278564453, -266.8187561035156),
+    Vector3.new(-63.664207458496094, 1.1315479278564453, -258.2731018066406),
+    Vector3.new(64.26338195800781, 1.1315479278564453, -261.1778259277344),
+    Vector3.new(-67.14725494384766, 1.1315479278564453, -253.8741455078125),
+    Vector3.new(63.508689880371094, 1.22859525680542, -253.81594848632812),
+    Vector3.new(-70.18795776367188, 2.208253860473633, -248.05389404296875),
+    Vector3.new(59.941558837890625, 1.1315479278564453, -248.67950439453125),
+    Vector3.new(-64.42286682128906, 1.1315479278564453, -241.85870361328125),
+    Vector3.new(62.11759567260742, 1.1315479278564453, -241.6771697998047),
+    Vector3.new(-63.55213165283203, 1.1315479278564453, -236.74876403808594),
+    Vector3.new(57.38639831542969, 1.1315479278564453, -235.5316619873047),
+    Vector3.new(-63.60404586791992, 1.1315479278564453, -230.16343688964844),
+    Vector3.new(58.80023193359375, 1.1315479278564453, -230.07630920410156),
+    Vector3.new(-55.14216613769531, 1.1315479278564453, -225.20751953125),
+    Vector3.new(53.620574951171875, 1.1315479278564453, -224.3403778076172),
+    Vector3.new(-52.738807678222656, 1.1315536499023438, -218.52462768554688),
+    Vector3.new(51.87889862060547, 1.1315479278564453, -217.5782012939453),
+    Vector3.new(-51.43490982055664, 1.1315479278564453, -212.39735412597656),
+    Vector3.new(47.961185455322266, 1.1315479278564453, -211.7166290283203),
+    Vector3.new(-55.424320220947266, 1.1315481662750244, -209.82174682617188),
+    Vector3.new(50.25764465332031, 1.1315479278564453, -211.72801208496094),
+    Vector3.new(-51.36840057373047, 1.1315479278564453, -206.13087463378906),
+    Vector3.new(46.21719741821289, 1.1315479278564453, -205.8972625732422),
+    Vector3.new(-40.48453903198242, 1.1315479278564453, -199.15243530273438),
+    Vector3.new(38.47490692138672, 1.1315479278564453, -202.86593627929688),
+    Vector3.new(-8.090100288391113, 3.267551898956299, -199.5373077392578)
 }
 
 -- Флаг для повторения маршрута
@@ -409,12 +419,12 @@ local function runRoute(player)
     while isRunning do
         -- Телепортируем на первую точку
         if waypoints[1] then
-            moveToPosition(player, waypoints[1], 0.1) -- Телепорт как быстрое перемещение
+            moveToPosition(player, waypoints[1], 0.01) -- Телепорт как быстрое перемещение
         end
 
         -- Проходим через все остальные точки
         for i = 2, #waypoints do
-            moveToPosition(player, waypoints[i], 1) -- Плавное перемещение с Tween
+            moveToPosition(player, waypoints[i], 0.75) -- Плавное перемещение с Tween
         end
 
         print("Маршрут завершён. Перезапуск...")
@@ -437,53 +447,81 @@ end)
 local Boss42 = Window:NewTab("Доп")
 local Boss42Section = Boss42:NewSection(".")
 
--- Функция для блокировки движения
-local function blockMovement()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
+Boss42Section:NewButton("ServerHop", "", function()
+        local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local PlaceId = game.PlaceId
+
+local function serverHop()
+    -- Получаем список доступных серверов
+    local servers = {}
+    local cursor = nil
+    local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
     
-    humanoid.PlatformStand = true  -- Останавливает движение
+    repeat
+        local response = game:HttpGet(cursor and (url .. "&cursor=" .. cursor) or url)
+        local data = game:GetService("HttpService"):JSONDecode(response)
+        
+        for _, server in pairs(data.data) do
+            if server.playing < server.maxPlayers then
+                table.insert(servers, server.id)
+            end
+        end
+        
+        cursor = data.nextPageCursor
+    until not cursor or #servers > 0
+
+    if #servers > 0 then
+        -- Переносим игрока на случайный сервер
+        local randomServer = servers[math.random(1, #servers)]
+        TeleportService:TeleportToPlaceInstance(PlaceId, randomServer, Players.LocalPlayer)
+    else
+        print("Нет доступных серверов для хопа.")
+    end
 end
 
--- Функция для разблокировки движения
-local function unblockMovement()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
-    
-    humanoid.PlatformStand = false  -- Разблокирует движение
-end
-
--- Функция для телепортации на координаты (-27, 3, -20)
-local function teleport()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    
-    -- Телепорт на координаты (-27, 3, -20)
-    humanoidRootPart.CFrame = CFrame.new(-27, 3, -20)
-
-    blockMovement()  -- Блокируем движение после телепортации
-end
-
--- Функция для телепортации чуть выше и восстановление возможности двигаться
-local function teleportUp()
-    local player = game.Players.LocalPlayer
-    local character = player.Character or player.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    
-    -- Телепортируем немного выше по оси Y (например, на 10 единиц выше)
-    humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position.X, humanoidRootPart.Position.Y + 10, humanoidRootPart.Position.Z)
-
-    unblockMovement()  -- Восстанавливаем возможность двигаться
-end
-
--- Создание кнопок в меню
-Boss42Section:NewButton("Телепортироваться на -27, 3, -20", "Телепортирует на заданные координаты", function()
-    teleport()
+-- Вызов функции
+serverHop()
 end)
 
-Boss42Section:NewButton("Телепортироваться выше и двигаться", "Телепортирует немного выше и позволяет двигаться", function()
-    teleportUp()
+local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[4].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+
+-- Переключатель для увеличения объекта в 100 раз
+Boss42Section:NewToggle("Рыбачить Везде", "Активировать или деактивировать Рыбалку", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
 end)
+
+-- Показываем меню
+Window:Display()
