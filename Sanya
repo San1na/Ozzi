@@ -484,7 +484,7 @@ end
 serverHop()
 end)
 
-local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[4].PadGlow
+local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[5].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
