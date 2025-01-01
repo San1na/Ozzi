@@ -11,11 +11,6 @@ end)
 
 local isRolling = false  -- This variable will control the rolling state
 
--- Button for the "Ролл" action (not needed for repeating roll)
-MainSection:NewButton("Ролл", "", function()
-    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
-end)
-
 -- Toggle for starting and stopping the rolling action
 MainSection:NewToggle("Ролл каждый 0.5 сек", "Активировать или деактивировать", function(state)
     isRolling = state  -- Set rolling state based on toggle
@@ -57,11 +52,6 @@ local function purchaseAll()
         wait(0.2)
     end
 end
-
--- Кнопка для разовой покупки
-MainSection:NewButton("Все Мерчанты", "Купить всё сразу", function()
-    purchaseAll()
-end)
 
 -- Автоматическая покупка
 MainSection:NewToggle("Полностью Авто", "Покупать автоматически", function(state)
