@@ -2,17 +2,17 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local Window = Library.CreateLib(".", "Synapse")
 
 -- MAIN
-local Main = Window:NewTab("Главное")
-local MainSection = Main:NewSection("Наживка")
+local Main = Window:NewTab("Home")
+local MainSection = Main:NewSection("Main")
 
-MainSection:NewKeybind("Вкл-Выкл Меню", ".", Enum.KeyCode.Y, function()
+MainSection:NewKeybind("Turn on-off", ".", Enum.KeyCode.Y, function()
     Library:ToggleUI()
 end)
 
 local isRolling = false  -- This variable will control the rolling state
 
 -- Toggle for starting and stopping the rolling action
-MainSection:NewToggle("Ролл каждый 0.5 сек", "Активировать или деактивировать", function(state)
+MainSection:NewToggle("Auto Roll", "just rolling", function(state)
     isRolling = state  -- Set rolling state based on toggle
 
     if isRolling then
@@ -54,7 +54,7 @@ local function purchaseAll()
 end
 
 -- Автоматическая покупка
-MainSection:NewToggle("Полностью Авто", "Покупать автоматически", function(state)
+MainSection:NewToggle("Auto buy", "Auto buy all merchants in game", function(state)
     _G.AutoPurchase = state
 
     if state then
@@ -69,7 +69,7 @@ MainSection:NewToggle("Полностью Авто", "Покупать авто�
     end
 end)
 
-MainSection:NewButton("Анти-Афк", "ButtonInfo", function()
+MainSection:NewButton("Anti afk", "ButtonInfo", function()
         repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
 
 if getgenv().AntiAfkExecuted and thisoneissocoldww then 
@@ -417,24 +417,24 @@ local function runRoute(player)
             moveToPosition(player, waypoints[i], 0.75) -- Плавное перемещение с Tween
         end
 
-        print("Маршрут завершён. Перезапуск...")
+        print("Good")
         wait(1)
     end
 end
 
 -- Кнопка для запуска/остановки маршрута
-MainSection:NewButton("Запустить/Остановить маршрут", "Начинает или останавливает движение", function()
+MainSection:NewButton("Farm Party", ".", function()
     isRunning = not isRunning
     if isRunning then
-        print("Маршрут запущен.")
+        print("Started")
         local player = game.Players.LocalPlayer
         coroutine.wrap(runRoute)(player)
     else
-        print("Маршрут остановлен.")
+        print("Ended")
     end
 end)
 
-local Boss42 = Window:NewTab("Доп")
+local Boss42 = Window:NewTab("Other")
 local Boss42Section = Boss42:NewSection(".")
 
 Boss42Section:NewButton("ServerHop", "", function()
@@ -466,12 +466,90 @@ local function serverHop()
         local randomServer = servers[math.random(1, #servers)]
         TeleportService:TeleportToPlaceInstance(PlaceId, randomServer, Players.LocalPlayer)
     else
-        print("Нет доступных серверов для хопа.")
+        print(".")
     end
 end
 
 -- Вызов функции
 serverHop()
+end)
+
+local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[6].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+
+-- Переключатель для увеличения объекта в 100 раз
+Boss42Section:NewToggle("Normal Fishing", ".", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.FishingPads.Corrupted.PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+
+-- Переключатель для увеличения объекта в 100 раз
+Boss42Section:NewToggle("Corrupted Fishing", ".", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
 end)
 
 local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[5].PadGlow
@@ -503,7 +581,7 @@ end
 
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Рыбачить Везде", "Активировать или деактивировать Рыбалку", function(state)
+Boss42Section:NewToggle("Ice Fishing", "", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
