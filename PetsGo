@@ -474,7 +474,7 @@ end
 serverHop()
 end)
 
-local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[6].PadGlow
+local padGlow = workspace.MAP.INTERACT.FishingPads.Default.PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
@@ -578,7 +578,6 @@ local function resetObject()
     padGlow.Size = originalSize
     padGlow.Position = originalPosition
 end
-
 
 -- Переключатель для увеличения объекта в 100 раз
 Boss42Section:NewToggle("Ice Fishing", "", function(state)
