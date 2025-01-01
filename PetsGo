@@ -474,6 +474,22 @@ end
 serverHop()
 end)
 
+local CurrentFPS = 60
+
+-- Функция для изменения FPS
+local function ChangeFPS(value)
+    CurrentFPS = value
+    setfflag("TaskSchedulerTargetFps", tostring(value))
+    print("FPS limit set to:", value)
+end
+
+Boss42Section:NewSlider("FPS Limit", "Adjust the maximum FPS", 144, 15, function(value) 
+    ChangeFPS(value)
+end)
+
+local Pizda = Window:NewTab("Fishing")
+local PizdaSection = Pizda:NewSection("Main")
+
 local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[5].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
@@ -502,7 +518,7 @@ local function resetObject()
 end
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Ice Fishing", "", function(state)
+PizdaSection:NewToggle("Ice Fishing", "", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
@@ -541,7 +557,7 @@ end
 
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Normal Fishing", ".", function(state)
+PizdaSection:NewToggle("Normal Fishing", ".", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
@@ -581,7 +597,7 @@ end
 
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Corrupted Fishing", ".", function(state)
+PizdaSection:NewToggle("Corrupted Fishing", ".", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
@@ -589,17 +605,4 @@ Boss42Section:NewToggle("Corrupted Fishing", ".", function(state)
         print(".")
         resetObject()  -- Возвращаем объект к исходному размеру и позиции
     end
-end)
-
-local CurrentFPS = 60
-
--- Функция для изменения FPS
-local function ChangeFPS(value)
-    CurrentFPS = value
-    setfflag("TaskSchedulerTargetFps", tostring(value))
-    print("FPS limit set to:", value)
-end
-
-Boss42Section:NewSlider("FPS Limit", "Adjust the maximum FPS", 144, 15, function(value) 
-    ChangeFPS(value)
 end)
