@@ -482,7 +482,7 @@ Fish42Section:NewToggle("Corrupted Fishing", ".", function(state)
     end
 end)
 
-local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[4].PadGlow
+local padGlow = workspace.MAP.INTERACT.FishingPads.Ice.PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
@@ -520,11 +520,10 @@ Fish42Section:NewToggle("Ice Fishing", "", function(state)
     end
 end)
 
-local Mine42 = Window:NewTab("Mining")
-local Mine42Section = Mine42:NewSection(".")
+local Mining = Window:NewTab("Mining")
+local MiningSection = Mining:NewSection(".")
 
-Mine42Section:NewToggle("Ruby", "", function(state)
-        local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[5].PadGlow
+local padGlow = workspace.MAP.INTERACT.MiningPads["Dirt Ore"].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
@@ -550,4 +549,242 @@ local function resetObject()
     padGlow.Size = originalSize
     padGlow.Position = originalPosition
 end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Dirt Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Bronze Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Bronze Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Iron Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Iron Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Gold Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Gold Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Emerald Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Emerald Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[5].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Obsidian Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[10].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Runic Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
 end)
