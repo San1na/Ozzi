@@ -788,3 +788,58 @@ MiningSection:NewToggle("Runic Ore", "", function(state)
         resetObject()  -- Возвращаем объект к исходному размеру и позиции
     end
 end)
+
+local isAutoMerchantEnabled = false
+
+-- Переменная для отслеживания состояния
+local isAutoMerchantEnabled = false
+
+-- Функция для выполнения покупки
+local function performPurchase()
+    while isAutoMerchantEnabled do
+        -- Проверяем наличие всех необходимых объектов
+        local replicatedStorage = game:GetService("ReplicatedStorage")
+        local network = replicatedStorage:FindFirstChild("Network")
+        if network then
+            local customMerchant = network:FindFirstChild("CustomMerchants_Purchase")
+            if customMerchant then
+                for i = 1, 8 do -- Цикл с 1 до 8
+                    local args = {
+                        [1] = "MiningMerchant",
+                        [2] = i, -- Индекс покупки
+                    }
+
+                    -- Выполняем покупку с использованием pcall для отлова ошибок
+                    local success, err = pcall(function()
+                        customMerchant:InvokeServer(unpack(args))
+                    end)
+
+                    if not success then
+                        warn("Ошибка при выполнении InvokeServer: " .. tostring(err))
+                    end
+
+                    -- Задержка между покупками
+                    wait(0.2) -- Уменьшил задержку для ускорения, если сервер позволяет
+                end
+            else
+                warn("Не найден объект CustomMerchants_Purchase")
+                break
+            end
+        else
+            warn("Не найден объект Network в ReplicatedStorage")
+            break
+        end
+
+        -- Дополнительная задержка между циклами покупок (если нужно)
+        wait(1)
+    end
+end
+
+-- Обработчик переключателя
+MiningSection:NewToggle("AutoMerchant", "", function(state)
+    isAutoMerchantEnabled = state
+    if state then
+        -- Запускаем выполнение покупок
+        performPurchase()
+    end
+end)
