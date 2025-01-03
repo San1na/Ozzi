@@ -520,10 +520,10 @@ Fish42Section:NewToggle("Ice Fishing", "", function(state)
     end
 end)
 
-local Mine42 = Window:NewTab("Fishing")
+local Mine42 = Window:NewTab("Mining")
 local Mine42Section = Mine42:NewSection(".")
 
-Mine42Section:NewToggle("Ice Fishing", "", function(state)
+Mine42Section:NewToggle("Ruby", "", function(state)
         local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[5].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
