@@ -474,6 +474,22 @@ end
 serverHop()
 end)
 
+local CurrentFPS = 60
+
+-- Функция для изменения FPS
+local function ChangeFPS(value)
+    CurrentFPS = value
+    setfflag("TaskSchedulerTargetFps", tostring(value))
+    print("FPS limit set to:", value)
+end
+
+Boss42Section:NewSlider("FPS Limit", "Adjust the maximum FPS", 144, 15, function(value) 
+    ChangeFPS(value)
+end)
+
+local Fish42 = Window:NewTab("Other")
+local Fish42Section = Fish42:NewSection(".")
+
 local padGlow = workspace.MAP.INTERACT.FishingPads.Default.PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
@@ -503,7 +519,7 @@ end
 
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Normal Fishing", ".", function(state)
+Fish42Section:NewToggle("Normal Fishing", ".", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
@@ -542,7 +558,7 @@ end
 
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Corrupted Fishing", ".", function(state)
+Fish42Section:NewToggle("Corrupted Fishing", ".", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
@@ -552,7 +568,7 @@ Boss42Section:NewToggle("Corrupted Fishing", ".", function(state)
     end
 end)
 
-local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[5].PadGlow
+local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[4].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
@@ -580,7 +596,7 @@ local function resetObject()
 end
 
 -- Переключатель для увеличения объекта в 100 раз
-Boss42Section:NewToggle("Ice Fishing", "", function(state)
+Fish42Section:NewToggle("Ice Fishing", "", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
@@ -588,17 +604,4 @@ Boss42Section:NewToggle("Ice Fishing", "", function(state)
         print(".")
         resetObject()  -- Возвращаем объект к исходному размеру и позиции
     end
-end)
-
-local CurrentFPS = 60
-
--- Функция для изменения FPS
-local function ChangeFPS(value)
-    CurrentFPS = value
-    setfflag("TaskSchedulerTargetFps", tostring(value))
-    print("FPS limit set to:", value)
-end
-
-Boss42Section:NewSlider("FPS Limit", "Adjust the maximum FPS", 144, 15, function(value) 
-    ChangeFPS(value)
 end)
