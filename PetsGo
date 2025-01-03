@@ -348,92 +348,6 @@ while true do
 	end
 end)
 
--- Координаты точек маршрута
-local waypoints = {
-    Vector3.new(-52.532596588134766, 1.1315479278564453, -272.5875549316406),
-    Vector3.new(38.75706481933594, 1.1315479278564453, -272.37945556640625),
-    Vector3.new(-60.0663948059082, 1.1315479278564453, -265.6180419921875),
-    Vector3.new(54.04348373413086, 1.1315479278564453, -266.8187561035156),
-    Vector3.new(-63.664207458496094, 1.1315479278564453, -258.2731018066406),
-    Vector3.new(64.26338195800781, 1.1315479278564453, -261.1778259277344),
-    Vector3.new(-67.14725494384766, 1.1315479278564453, -253.8741455078125),
-    Vector3.new(63.508689880371094, 1.22859525680542, -253.81594848632812),
-    Vector3.new(-70.18795776367188, 2.208253860473633, -248.05389404296875),
-    Vector3.new(59.941558837890625, 1.1315479278564453, -248.67950439453125),
-    Vector3.new(-64.42286682128906, 1.1315479278564453, -241.85870361328125),
-    Vector3.new(62.11759567260742, 1.1315479278564453, -241.6771697998047),
-    Vector3.new(-63.55213165283203, 1.1315479278564453, -236.74876403808594),
-    Vector3.new(57.38639831542969, 1.1315479278564453, -235.5316619873047),
-    Vector3.new(-63.60404586791992, 1.1315479278564453, -230.16343688964844),
-    Vector3.new(58.80023193359375, 1.1315479278564453, -230.07630920410156),
-    Vector3.new(-55.14216613769531, 1.1315479278564453, -225.20751953125),
-    Vector3.new(53.620574951171875, 1.1315479278564453, -224.3403778076172),
-    Vector3.new(-52.738807678222656, 1.1315536499023438, -218.52462768554688),
-    Vector3.new(51.87889862060547, 1.1315479278564453, -217.5782012939453),
-    Vector3.new(-51.43490982055664, 1.1315479278564453, -212.39735412597656),
-    Vector3.new(47.961185455322266, 1.1315479278564453, -211.7166290283203),
-    Vector3.new(-55.424320220947266, 1.1315481662750244, -209.82174682617188),
-    Vector3.new(50.25764465332031, 1.1315479278564453, -211.72801208496094),
-    Vector3.new(-51.36840057373047, 1.1315479278564453, -206.13087463378906),
-    Vector3.new(46.21719741821289, 1.1315479278564453, -205.8972625732422),
-    Vector3.new(-40.48453903198242, 1.1315479278564453, -199.15243530273438),
-    Vector3.new(38.47490692138672, 1.1315479278564453, -202.86593627929688),
-    Vector3.new(-8.090100288391113, 3.267551898956299, -199.5373077392578)
-}
-
--- Флаг для повторения маршрута
-local isRunning = false
-
--- TweenService для плавного перемещения
-local TweenService = game:GetService("TweenService")
-
--- Функция для перемещения игрока
-local function moveToPosition(player, position, duration)
-    if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        local humanoidRootPart = player.Character.HumanoidRootPart
-
-        -- Создаём Tween
-        local tweenInfo = TweenInfo.new(
-            duration, -- Длительность
-            Enum.EasingStyle.Linear, -- Линейное движение
-            Enum.EasingDirection.Out
-        )
-        local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = CFrame.new(position)})
-        tween:Play()
-        tween.Completed:Wait() -- Ждём завершения движения
-    end
-end
-
--- Функция для выполнения маршрута
-local function runRoute(player)
-    while isRunning do
-        -- Телепортируем на первую точку
-        if waypoints[1] then
-            moveToPosition(player, waypoints[1], 0.01) -- Телепорт как быстрое перемещение
-        end
-
-        -- Проходим через все остальные точки
-        for i = 2, #waypoints do
-            moveToPosition(player, waypoints[i], 0.75) -- Плавное перемещение с Tween
-        end
-
-        print("Good")
-        wait(1)
-    end
-end
-
--- Кнопка для запуска/остановки маршрута
-MainSection:NewButton("Farm Party", ".", function()
-    isRunning = not isRunning
-    if isRunning then
-        print("Started")
-        local player = game.Players.LocalPlayer
-        coroutine.wrap(runRoute)(player)
-    else
-        print("Ended")
-    end
-end)
-
 local Boss42 = Window:NewTab("Other")
 local Boss42Section = Boss42:NewSection(".")
 
@@ -568,7 +482,7 @@ Fish42Section:NewToggle("Corrupted Fishing", ".", function(state)
     end
 end)
 
-local padGlow = workspace.MAP.INTERACT.FishingPads:GetChildren()[4].PadGlow
+local padGlow = workspace.MAP.INTERACT.FishingPads.Ice.PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
@@ -597,6 +511,275 @@ end
 
 -- Переключатель для увеличения объекта в 100 раз
 Fish42Section:NewToggle("Ice Fishing", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local Mining = Window:NewTab("Mining")
+local MiningSection = Mining:NewSection(".")
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Dirt Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Dirt Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Bronze Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Bronze Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Iron Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Iron Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Gold Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Gold Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads["Emerald Ore"].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Emerald Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[5].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Obsidian Ore", "", function(state)
+    if state then
+        print(".")
+        enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
+    else
+        print(".")
+        resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[10].PadGlow
+
+-- Сохраняем исходные значения размера и позиции объекта
+local originalSize = padGlow.Size
+local originalPosition = padGlow.Position
+
+-- Функция для увеличения объекта в 100 раз по осям X и Z, но оставляем ось Y неизменной
+local function enlargeByFactorXAndZ(factor)
+    -- Увеличиваем только оси X и Z, ось Y остается прежней
+    padGlow.Size = Vector3.new(padGlow.Size.X * factor, padGlow.Size.Y, padGlow.Size.Z * factor)
+    
+    -- Устанавливаем объект в нужную позицию (можно изменить)
+    padGlow.Position = Vector3.new(0, padGlow.Position.Y, 0)  -- Это можно изменить на нужные координаты
+
+    -- Убедимся, что объект закреплен
+    padGlow.Anchored = true
+
+    -- Отключаем коллизию, если нужно
+    padGlow.CanCollide = false
+end
+
+-- Функция для восстановления исходного размера и позиции объекта
+local function resetObject()
+    padGlow.Size = originalSize
+    padGlow.Position = originalPosition
+end
+
+-- Переключатель для увеличения объекта в 100 раз
+MiningSection:NewToggle("Runic Ore", "", function(state)
     if state then
         print(".")
         enlargeByFactorXAndZ(100)  -- Увеличиваем объект в 100 раз по осям X и Z
