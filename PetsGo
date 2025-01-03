@@ -751,7 +751,7 @@ MiningSection:NewToggle("Emerald Ore", "", function(state)
     end
 end)
 
-local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[5].PadGlow
+local padGlow = workspace.MAP.INTERACT.MiningPads["Obsidian Ore"].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
@@ -789,7 +789,7 @@ MiningSection:NewToggle("Obsidian Ore", "", function(state)
     end
 end)
 
-local padGlow = workspace.MAP.INTERACT.MiningPads:GetChildren()[10].PadGlow
+local padGlow = workspace.MAP.INTERACT.MiningPads["Runic Ore"].PadGlow
 
 -- Сохраняем исходные значения размера и позиции объекта
 local originalSize = padGlow.Size
