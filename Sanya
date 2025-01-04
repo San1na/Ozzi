@@ -841,7 +841,7 @@ local function performPurchase()
         if network then
             local customMerchant = network:FindFirstChild("CustomMerchants_Purchase")
             if customMerchant then
-                for i = 1, 8 do -- Цикл с 1 до 7
+                for i = 1, 7 do -- Цикл с 1 до 7
                     local args = {
                         [1] = "MiningMerchant",
                         [2] = i, -- Индекс покупки
