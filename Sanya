@@ -881,3 +881,22 @@ MiningSection:NewToggle("AutoMerchant", "", function(state)
         performPurchase()
     end
 end)
+
+local Tech = Window:NewTab("Tech")
+local TechSection = Tech:NewSection(".")
+
+local toggleState = false -- Переменная для хранения состояния переключателя
+
+TechSection:NewToggle("Roll(tech)", ".", function(state)
+    toggleState = state -- Изменение состояния переключателя
+
+    if toggleState then
+        -- Если переключатель включен, запускаем цикл
+        spawn(function()
+            while toggleState do
+                game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Tycoons: Hatch"):InvokeServer()
+                wait(0.5) -- Задержка между выполнением (например, 1 секунда)
+            end
+        end)
+    end
+end)
