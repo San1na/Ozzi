@@ -900,3 +900,23 @@ TechSection:NewToggle("Roll(tech)", ".", function(state)
         end)
     end
 end)
+
+TechSection:NewToggle("Tech Merchant", "Включить/выключить", function(state)
+    toggleState = state -- Обновляем состояние переключателя
+
+    while toggleState do
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Network = ReplicatedStorage:WaitForChild("Network")
+        local PurchaseEvent = Network:WaitForChild("CustomMerchants_Purchase")
+
+        for i = 1, 6 do
+            local args = {
+                "FactoryMerchant",
+                i
+            }
+            PurchaseEvent:InvokeServer(unpack(args))
+        end
+
+        wait(0.35) -- Задержка между выполнениями, чтобы избежать перегрузки
+    end
+end)
