@@ -12,7 +12,7 @@ end)
 local isRolling = false  -- This variable will control the rolling state
 
 -- Toggle for starting and stopping the rolling action
-MainSection:NewToggle("Auto Roll", "just rolling", function(state)
+MainSection:NewToggle("AutoRoll", "just rolling", function(state)
     isRolling = state  -- Set rolling state based on toggle
 
     if isRolling then
@@ -24,52 +24,86 @@ MainSection:NewToggle("Auto Roll", "just rolling", function(state)
     end
 end)
 
--- Функция для покупки
-local function purchaseAll()
-    -- Покупки StandardMerchant
+-- Функции для покупок
+local function purchaseStandardMerchant()
     for i = 1, 6 do
         local args = { [1] = "StandardMerchant", [2] = i }
         game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
-        wait(0.2) -- Задержка для стабильности
-    end
-
-    -- Покупка PotionVendingMachine
-    local args = { [1] = "PotionVendingMachine" }
-    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("VendingMachines_Purchase"):InvokeServer(unpack(args))
-    wait(0.2)
-
-    -- Покупки IceFishingMerchant
-    for i = 1, 6 do
-        local args = { [1] = "IceFishingMerchant", [2] = i }
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
-        wait(0.2)
-    end
-
-    -- Покупки FishingMerchant
-    for i = 1, 6 do
-        local args = { [1] = "FishingMerchant", [2] = i }
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
-        wait(0.2)
     end
 end
 
--- Автоматическая покупка
-MainSection:NewToggle("Auto buy", "Auto buy all merchants in game", function(state)
-    _G.AutoPurchase = state
+MainSection:NewToggle("Autobuy Standard Merchant", "Automatically buy from Standard Merchant", function(state)
+    _G.AutoBuyStandardMerchant = state
 
     if state then
         spawn(function()
-            while _G.AutoPurchase do
-                purchaseAll()
-                wait(5) -- Интервал между циклами
+            while _G.AutoBuyStandardMerchant do
+                purchaseStandardMerchant()
+                wait(0.35) -- Интервал между покупками
             end
         end)
-    else
-        _G.AutoPurchase = false
     end
 end)
 
-MainSection:NewButton("Anti afk", "ButtonInfo", function()
+local function purchasePotionVendingMachine()
+    local args = { [1] = "PotionVendingMachine" }
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("VendingMachines_Purchase"):InvokeServer(unpack(args))
+end
+
+MainSection:NewToggle("Autobuy Potion Vending Machine", "Automatically buy from Potion Vending Machine", function(state)
+    _G.AutoBuyPotionVendingMachine = state
+
+    if state then
+        spawn(function()
+            while _G.AutoBuyPotionVendingMachine do
+                purchasePotionVendingMachine()
+                wait(0.35)
+            end
+        end)
+    end
+end)
+
+local Boss42 = Window:NewTab("Other")
+local Boss42Section = Boss42:NewSection(".")
+
+Boss42Section:NewButton("ServerHop", "", function()
+        local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local PlaceId = game.PlaceId
+
+local function serverHop()
+    -- Получаем список доступных серверов
+    local servers = {}
+    local cursor = nil
+    local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+    
+    repeat
+        local response = game:HttpGet(cursor and (url .. "&cursor=" .. cursor) or url)
+        local data = game:GetService("HttpService"):JSONDecode(response)
+        
+        for _, server in pairs(data.data) do
+            if server.playing < server.maxPlayers then
+                table.insert(servers, server.id)
+            end
+        end
+        
+        cursor = data.nextPageCursor
+    until not cursor or #servers > 0
+
+    if #servers > 0 then
+        -- Переносим игрока на случайный сервер
+        local randomServer = servers[math.random(1, #servers)]
+        TeleportService:TeleportToPlaceInstance(PlaceId, randomServer, Players.LocalPlayer)
+    else
+        print(".")
+    end
+end
+
+-- Вызов функции
+serverHop()
+end)
+
+Boss42Section:NewButton("Anti afk", "ButtonInfo", function()
         repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
 
 if getgenv().AntiAfkExecuted and thisoneissocoldww then 
@@ -348,45 +382,6 @@ while true do
 	end
 end)
 
-local Boss42 = Window:NewTab("Other")
-local Boss42Section = Boss42:NewSection(".")
-
-Boss42Section:NewButton("ServerHop", "", function()
-        local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
-local PlaceId = game.PlaceId
-
-local function serverHop()
-    -- Получаем список доступных серверов
-    local servers = {}
-    local cursor = nil
-    local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
-    
-    repeat
-        local response = game:HttpGet(cursor and (url .. "&cursor=" .. cursor) or url)
-        local data = game:GetService("HttpService"):JSONDecode(response)
-        
-        for _, server in pairs(data.data) do
-            if server.playing < server.maxPlayers then
-                table.insert(servers, server.id)
-            end
-        end
-        
-        cursor = data.nextPageCursor
-    until not cursor or #servers > 0
-
-    if #servers > 0 then
-        -- Переносим игрока на случайный сервер
-        local randomServer = servers[math.random(1, #servers)]
-        TeleportService:TeleportToPlaceInstance(PlaceId, randomServer, Players.LocalPlayer)
-    else
-        print(".")
-    end
-end
-
--- Вызов функции
-serverHop()
-end)
 
 local CurrentFPS = 60
 
@@ -517,6 +512,46 @@ Fish42Section:NewToggle("Ice Fishing", "", function(state)
     else
         print(".")
         resetObject()  -- Возвращаем объект к исходному размеру и позиции
+    end
+end)
+
+local function purchaseFishingMerchant()
+    for i = 1, 6 do
+        local args = { [1] = "FishingMerchant", [2] = i }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+    end
+end
+
+Fish42Section:NewToggle("Autobuy Fishing Merchant", "Automatically buy from Fishing Merchant", function(state)
+    _G.AutoBuyFishingMerchant = state
+
+    if state then
+        spawn(function()
+            while _G.AutoBuyFishingMerchant do
+                purchaseFishingMerchant()
+                wait(0.35)
+            end
+        end)
+    end
+end)
+
+local function purchaseIceFishingMerchant()
+    for i = 1, 6 do
+        local args = { [1] = "IceFishingMerchant", [2] = i }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+    end
+end
+
+Fish42Section:NewToggle("Autobuy Ice Fishing Merchant", "Automatically buy from Ice Fishing Merchant", function(state)
+    _G.AutoBuyIceFishingMerchant = state
+
+    if state then
+        spawn(function()
+            while _G.AutoBuyIceFishingMerchant do
+                purchaseIceFishingMerchant()
+                wait(0.35)
+            end
+        end)
     end
 end)
 
@@ -857,7 +892,7 @@ local function performPurchase()
                     end
 
                     -- Задержка между покупками
-                    wait(0.2) -- Уменьшил задержку для ускорения, если сервер позволяет
+                    wait(0.35) -- Уменьшил задержку для ускорения, если сервер позволяет
                 end
             else
                 warn("Не найден объект CustomMerchants_Purchase")
@@ -869,12 +904,12 @@ local function performPurchase()
         end
 
         -- Дополнительная задержка между циклами покупок (если нужно)
-        wait(1)
+        wait(0.35)
     end
 end
 
 -- Обработчик переключателя
-MiningSection:NewToggle("AutoMerchant", "", function(state)
+MiningSection:NewToggle("Autobuy Mining Merchant", "", function(state)
     isAutoMerchantEnabled = state
     if state then
         -- Запускаем выполнение покупок
@@ -901,7 +936,7 @@ TechSection:NewToggle("Roll(tech)", ".", function(state)
     end
 end)
 
-TechSection:NewToggle("Tech Merchant", "Включить/выключить", function(state)
+TechSection:NewToggle("AutoBuy Tech Merchant", "Включить/выключить", function(state)
     toggleState = state -- Обновляем состояние переключателя
 
     while toggleState do
