@@ -24,30 +24,40 @@ MainSection:NewToggle("AutoRoll", "just rolling", function(state)
     end
 end)
 
-MainSection:NewButton("Collect All Orbs", "", function(state)
-    -- Ссылка на папку __THINGS
+MainSection:NewToggle("Collect All Orbs", "", function(state)
     local thingsFolder = workspace:FindFirstChild("__THINGS")
-    
+
     if thingsFolder then
-        -- Проверяем состояние переключателя
+        local orbsFolder = thingsFolder:FindFirstChild("Orbs")
+
         if state then
-            -- Если папка Orbs существует, сохраняем её содержимое и удаляем
-            local folder = thingsFolder:FindFirstChild("Orbs")
-            if folder and folder:IsA("Folder") then
-                savedOrbs = folder:Clone() -- Сохраняем копию папки Orbs
-                folder:Destroy()
+            -- Сохраняем содержимое папки перед удалением
+            if orbsFolder and orbsFolder:IsA("Folder") then
+                savedOrbsData = {}
+                for _, obj in pairs(orbsFolder:GetChildren()) do
+                    table.insert(savedOrbsData, obj:Clone()) -- Клонируем содержимое папки
+                end
+                orbsFolder:Destroy() -- Удаляем папку
                 print("Папка Orbs была удалена.")
             else
                 print("Папка Orbs не найдена.")
             end
         else
-            -- Если переключатель выключен, восстанавливаем папку Orbs
-            if savedOrbs then
-                savedOrbs.Parent = thingsFolder -- Восстанавливаем сохранённую папку
-                savedOrbs = nil -- Очищаем сохранённое состояние
+            -- Восстанавливаем папку
+            if savedOrbsData then
+                local newOrbsFolder = Instance.new("Folder")
+                newOrbsFolder.Name = "Orbs"
+                newOrbsFolder.Parent = thingsFolder
+
+                -- Восстанавливаем объекты внутри папки
+                for _, obj in pairs(savedOrbsData) do
+                    obj.Parent = newOrbsFolder
+                end
+
+                savedOrbsData = nil -- Очищаем сохранённые данные
                 print("Папка Orbs была восстановлена.")
             else
-                print("Нет сохранённых данных для восстановления.")
+                print("Нет данных для восстановления папки Orbs.")
             end
         end
     else
