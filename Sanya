@@ -958,8 +958,8 @@ MiningSection:NewToggle("Autobuy Mining Merchant", "", function(state)
     end
 end)
 
-local Valentine = Window:NewTab(".")
-local ValentineSection = Valentine:NewSection("Valentine")
+local Valentine = Window:NewTab("Valentine")
+local ValentineSection = Valentine:NewSection(".")
 
 local VRolling = false
 
