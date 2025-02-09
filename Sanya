@@ -972,6 +972,6 @@ ValentineSection:NewToggle("AutoRoll(Valentine)", "", function(state)
     
     while VRolling do
         boardRoll:InvokeServer(unpack(args))
-        wait(0.75)  -- Ожидание 0.75 секунды перед следующим вызовом
+        wait(0.5)  -- Ожидание 0.75 секунды перед следующим вызовом
     end
 end)
