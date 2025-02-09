@@ -958,29 +958,20 @@ MiningSection:NewToggle("Autobuy Mining Merchant", "", function(state)
     end
 end)
 
-local Lightning = Window:NewTab("Lightning")
-local LightningSection = Lightning:NewSection(".")
+local Valentine = Window:NewTab(".")
+local ValentineSection = Valentine:NewSection("Valentine")
 
-local autoBoltEnabled = false
+local VRolling = false
 
-LightningSection:NewToggle("Auto Bolt Of Lightning", "", function(state)
-    autoBoltEnabled = state -- Переключаем состояние
-
-    if autoBoltEnabled then
-        task.spawn(function()
-            local replicatedStorage = game:GetService("ReplicatedStorage")
-            local network = replicatedStorage:WaitForChild("Network"):WaitForChild("TeslaCoil: Submit")
-
-            local values = {"One", "Two", "Three", "Four"}
-            local index = 1
-
-            while autoBoltEnabled do
-                local args = {values[index], 1}
-                network:InvokeServer(unpack(args))
-
-                index = index % #values + 1 -- Переключение по циклу "One" → "Two" → "Three" → "Fourth"
-                task.wait(0.2) -- Ожидание 1 секунды
-            end
-        end)
+ValentineSection:NewToggle("AutoRoll(Valentine)", "", function(state)
+    VRolling = state
+    local args = {"Valentines"}
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+    local network = replicatedStorage:WaitForChild("Network")
+    local boardRoll = network:WaitForChild("Board_Roll")
+    
+    while VRolling do
+        boardRoll:InvokeServer(unpack(args))
+        wait(0.75)  -- Ожидание 0.75 секунды перед следующим вызовом
     end
 end)
