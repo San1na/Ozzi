@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib(".", "Synapse")
+local Window = Library.CreateLib("💕Buzina😘", "Synapse")
 
 -- MAIN
 local Main = Window:NewTab("Home")
@@ -38,9 +38,7 @@ MainSection:NewToggle("Collect All Orbs", "", function(state)
                     table.insert(savedOrbsData, obj:Clone()) -- Клонируем содержимое папки
                 end
                 orbsFolder:Destroy() -- Удаляем папку
-                print("Папка Orbs была удалена.")
             else
-                print("Папка Orbs не найдена.")
             end
         else
             -- Восстанавливаем папку
@@ -55,13 +53,42 @@ MainSection:NewToggle("Collect All Orbs", "", function(state)
                 end
 
                 savedOrbsData = nil -- Очищаем сохранённые данные
-                print("Папка Orbs была восстановлена.")
             else
-                print("Нет данных для восстановления папки Orbs.")
             end
         end
     else
-        print("Папка __THINGS не найдена.")
+    end
+end)
+
+--Open Crystal Key
+
+local toggled = false
+
+MainSection:NewToggle("Open Crystal Chest", "", function(state)
+    toggled = state
+    while toggled do
+        local args = {
+            [1] = 1,
+            [2] = false
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
+        wait(0) -- Задержка 0 секунды
+    end
+end)
+
+-- Open Secret Key
+
+local toggled = false
+
+MainSection:NewToggle("Open Secret Key", "", function(state)
+    toggled = state
+    while toggled do
+        local args = {
+            [1] = 1,
+            [2] = true
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
+        wait(0) -- Задержка 0 секунды
     end
 end)
 
