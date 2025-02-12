@@ -341,6 +341,13 @@ game:service'Players'.LocalPlayer.Idled:connect(function()
 end)
 
 
+Boss42Section:NewSlider("Speed", "", 500, 16, function(s) -- 500 (MaxValue) | 0 (MinValue)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
+end)
+
+Boss42Section:NewSlider("Jump Power", "", 500, 50, function(s) -- 500 (MaxValue) | 0 (MinValue)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = s
+end)
 
 
 local FPSsLabel = fpslabel
