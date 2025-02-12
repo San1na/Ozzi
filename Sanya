@@ -131,6 +131,58 @@ MainSection:NewToggle("Autobuy Potion Vending Machine", "Automatically buy from 
     end
 end)
 
+local Stat = Window:NewTab("Statistics")
+local StatSection = Stat:NewSection(".")
+
+-- Функция для сокращения чисел
+local function abbreviateNumber(num)
+    if num >= 1e9 then
+        return string.format("%.1fb", num / 1e9)
+    elseif num >= 1e6 then
+        return string.format("%.1fm", num / 1e6)
+    elseif num >= 1e3 then
+        return string.format("%.1fk", num / 1e3)
+    else
+        return tostring(num)
+    end
+end
+
+-- Создаем лейбл без данных
+local bestRollLabel = StatSection:NewLabel("Best Roll - Загрузка...")
+
+-- Получаем игрока
+local player = game:GetService("Players").LocalPlayer
+
+-- Проверяем, существует ли leaderstats и Best Roll
+if player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("👑 Best Roll") then
+    -- Обновляем начальное значение с сокращением
+    bestRollLabel:UpdateLabel("Best Roll - " .. abbreviateNumber(player.leaderstats["👑 Best Roll"].Value))
+
+    -- Добавляем событие для обновления при изменении
+    player.leaderstats["👑 Best Roll"].Changed:Connect(function(newValue)
+        bestRollLabel:UpdateLabel("👑Best Roll - " .. abbreviateNumber(newValue))
+    end)
+else
+    bestRollLabel:UpdateLabel("👑Best Roll - данные не найдены")
+end
+
+
+-- Получаем игрока
+local player = game:GetService("Players").LocalPlayer
+
+-- Проверяем, что leaderstats существует
+if player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("🎲 Rolls") then
+    -- Создаем лейбл и обновляем его значение
+    local rollsLabel = StatSection:NewLabel("🎲Rolls - " .. player.leaderstats["🎲 Rolls"].Value)
+
+    -- Обновляем текст при изменении значения
+    player.leaderstats["🎲 Rolls"].Changed:Connect(function(newValue)
+        rollsLabel:UpdateLabel("🎲Rolls - " .. newValue)
+    end)
+else
+    StatSection:NewLabel("Rolls - данные не найдены")
+end
+
 local Boss42 = Window:NewTab("Other")
 local Boss42Section = Boss42:NewSection(".")
 
