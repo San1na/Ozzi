@@ -709,6 +709,174 @@ MiningSection:NewToggle("Autobuy Mining Merchant", "", function(state)
     end
 end)
 
+-- Auto Chest
+local Open = Window:NewTab("Auto Treasure Chest")
+local OpenSection = Open:NewSection(".")
+
+local toggled = false
+
+OpenSection:NewToggle("Basic Mining Chest", "", function(state)
+    toggled = state
+
+    if toggled then
+        task.spawn(function()
+            while toggled do
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Save = require(ReplicatedStorage.Library.Client.Save)
+                local Inventory = Save.Get()["Inventory"]
+                local RNS = ReplicatedStorage:WaitForChild("Network")
+
+                for i, v in pairs(Inventory.Lootbox) do
+                    if v.id == "Basic Mining Chest" then
+                        local args = {
+                            [1] = i,
+                            [2] = 1
+                        }
+                        RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+                    end
+                end
+
+                task.wait(0) -- Добавлен интервал для предотвращения перегрузки
+            end
+        end)
+    end
+end)
+
+OpenSection:NewToggle("Rare Mining Chest", "", function(state)
+    toggled = state
+
+    if toggled then
+        task.spawn(function()
+            while toggled do
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Save = require(ReplicatedStorage.Library.Client.Save)
+                local Inventory = Save.Get()["Inventory"]
+                local RNS = ReplicatedStorage:WaitForChild("Network")
+
+                for i, v in pairs(Inventory.Lootbox) do
+                    if v.id == "Rare Mining Chest" then
+                        local args = {
+                            [1] = i,
+                            [2] = 1
+                        }
+                        RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+                    end
+                end
+
+                task.wait(0) -- Добавлен интервал для предотвращения перегрузки
+            end
+        end)
+    end
+end)
+
+OpenSection:NewToggle("Epic Mining Chest", "", function(state)
+    toggled = state
+
+    if toggled then
+        task.spawn(function()
+            while toggled do
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Save = require(ReplicatedStorage.Library.Client.Save)
+                local Inventory = Save.Get()["Inventory"]
+                local RNS = ReplicatedStorage:WaitForChild("Network")
+
+                for i, v in pairs(Inventory.Lootbox) do
+                    if v.id == "Epic Mining Chest" then
+                        local args = {
+                            [1] = i,
+                            [2] = 1
+                        }
+                        RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+                    end
+                end
+
+                task.wait(0) -- Добавлен интервал для предотвращения перегрузки
+            end
+        end)
+    end
+end)
+
+OpenSection:NewToggle("Legendary Mining Chest", "", function(state)
+    toggled = state
+
+    if toggled then
+        task.spawn(function()
+            while toggled do
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Save = require(ReplicatedStorage.Library.Client.Save)
+                local Inventory = Save.Get()["Inventory"]
+                local RNS = ReplicatedStorage:WaitForChild("Network")
+
+                for i, v in pairs(Inventory.Lootbox) do
+                    if v.id == "Legendary Mining Chest" then
+                        local args = {
+                            [1] = i,
+                            [2] = 1
+                        }
+                        RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+                    end
+                end
+
+                task.wait(0) -- Добавлен интервал для предотвращения перегрузки
+            end
+        end)
+    end
+end)
+
+OpenSection:NewToggle("Celestial Mining Chest", "", function(state)
+    toggled = state
+
+    if toggled then
+        task.spawn(function()
+            while toggled do
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Save = require(ReplicatedStorage.Library.Client.Save)
+                local Inventory = Save.Get()["Inventory"]
+                local RNS = ReplicatedStorage:WaitForChild("Network")
+
+                for i, v in pairs(Inventory.Lootbox) do
+                    if v.id == "Celestial Mining Chest" then
+                        local args = {
+                            [1] = i,
+                            [2] = 1
+                        }
+                        RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+                    end
+                end
+
+                task.wait(0) -- Добавлен интервал для предотвращения перегрузки
+            end
+        end)
+    end
+end)
+
+OpenSection:NewToggle("Runic Mining Chest", "", function(state)
+    toggled = state
+
+    if toggled then
+        task.spawn(function()
+            while toggled do
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Save = require(ReplicatedStorage.Library.Client.Save)
+                local Inventory = Save.Get()["Inventory"]
+                local RNS = ReplicatedStorage:WaitForChild("Network")
+
+                for i, v in pairs(Inventory.Lootbox) do
+                    if v.id == "Runic Mining Chest" then
+                        local args = {
+                            [1] = i,
+                            [2] = 1
+                        }
+                        RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+                    end
+                end
+
+                task.wait(0) -- Добавлен интервал для предотвращения перегрузки
+            end
+        end)
+    end
+end)
+
 local Boss42 = Window:NewTab("Other")
 local Boss42Section = Boss42:NewSection(".")
 
