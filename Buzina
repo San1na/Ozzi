@@ -176,7 +176,7 @@ local function consumeFruit(fruitName)
     end)
 end
 
-FruitSection:NewDropdown("Craft Potions", "", {"Off", "Apple", "Banana", "Pineapple", "Orange"}, function(currentOption)
+FruitSection:NewDropdown("Fruits", "", {"Off", "Apple", "Banana", "Pineapple", "Orange"}, function(currentOption)
     if currentOption == "Off" then
         print("Using Disabled")
         toggled = false  -- Останавливаем цикл
