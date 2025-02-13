@@ -150,6 +150,43 @@ ValentineSection:NewToggle("AutoRoll(Valentine)", "", function(state)
     end
 end)
 
+local Fruit = Window:NewTab("Consume Fruits")
+local FruitSection = Fruit:NewSection(".")
+
+local toggled = false
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local RNS = ReplicatedStorage:WaitForChild("Network")
+
+local function consumeFruit(fruitName)
+    spawn(function()
+        while toggled do
+            wait(0.35)
+            local Inventory = Save.Get()["Inventory"]
+            for i, v in pairs(Inventory.Fruit) do
+                if v.id == fruitName then
+                    local args = {
+                        [1] = i,
+                        [2] = 10
+                    }
+                    RNS:WaitForChild("Fruits: Consume"):InvokeServer(unpack(args))
+                end
+            end
+        end
+    end)
+end
+
+FruitSection:NewDropdown("Craft Potions", "", {"Off", "Apple", "Banana", "Pineapple", "Orange"}, function(currentOption)
+    if currentOption == "Off" then
+        print("Using Disabled")
+        toggled = false  -- Останавливаем цикл
+    else
+        toggled = true
+        print("Executing script for " .. currentOption)
+        consumeFruit(currentOption)
+    end
+end)
+
 local Fish42 = Window:NewTab("Fishing")
 local Fish42Section = Fish42:NewSection(".")
 
