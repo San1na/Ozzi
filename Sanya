@@ -12,7 +12,7 @@ end)
 local isRolling = false  -- This variable will control the rolling state
 
 -- Toggle for starting and stopping the rolling action
-MainSection:NewToggle("AutoRoll", "just rolling", function(state)
+MainSection:NewToggle("(UnSafe)AutoRoll", "just rolling", function(state)
     isRolling = state  -- Set rolling state based on toggle
 
     if isRolling then
@@ -23,6 +23,24 @@ MainSection:NewToggle("AutoRoll", "just rolling", function(state)
         end
     end
 end)
+
+local isAutoRollEnabled = false
+
+MainSection:NewToggle("Safe AutoRoll", "", function(state)
+    isAutoRollEnabled = state
+    if isAutoRollEnabled then
+        spawn(function()
+            local VirtualInputManager = game:GetService("VirtualInputManager")
+            while isAutoRollEnabled do
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+                wait(0.75)
+            end
+        end)
+    end
+end)
+
 
 MainSection:NewToggle("Collect All Orbs", "", function(state)
     local thingsFolder = workspace:FindFirstChild("__THINGS")
@@ -185,6 +203,22 @@ end
 
 local Boss42 = Window:NewTab("Other")
 local Boss42Section = Boss42:NewSection(".")
+
+Boss42Section:NewButton("Removes Lags From Opening Lootboxes", "", function()
+local replicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Путь к эффектам конфетти
+local confetti1 = replicatedStorage:FindFirstChild("Library") and replicatedStorage.Library.Client.GUIFX:FindFirstChild("Confetti")
+local confetti2 = replicatedStorage:FindFirstChild("Library") and replicatedStorage.Library.Client.WorldFX:FindFirstChild("Confetti")
+
+if confetti1 then
+    confetti1:Destroy()
+end
+
+if confetti2 then
+    confetti2:Destroy()
+end
+end)
 
 Boss42Section:NewSlider("Speed", "", 500, 16, function(s) -- 500 (MaxValue) | 0 (MinValue)
     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = s
