@@ -39,13 +39,13 @@ MainSection:NewToggle("Safe AutoRoll", "", function(state)
         
         -- Клик по координатам X 378 Y 898
         VirtualInputManager:SendMouseButtonEvent(378, 898, 0, true, game, 0)
-        wait(0)
+        wait(0.1)
         VirtualInputManager:SendMouseButtonEvent(378, 898, 0, false, game, 0)
-        wait(0)
+        wait(0.1)
         
         -- Клик по координатам X 1326 Y 905
         VirtualInputManager:SendMouseButtonEvent(1326, 905, 0, true, game, 0)
-        wait(0)
+        wait(0.1)
         VirtualInputManager:SendMouseButtonEvent(1326, 905, 0, false, game, 0)
     end
 end)
