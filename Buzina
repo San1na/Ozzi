@@ -9,7 +9,7 @@ MainSection:NewKeybind("Turn on-off", ".", Enum.KeyCode.Y, function()
     Library:ToggleUI()
 end)
 
-local isRolling = false  -- This variable will control the rolling state
+local isRolling = false  -- This fvariable will control the rolling state
 
 -- Toggle for starting and stopping the rolling action
 MainSection:NewToggle("AutoRoll", "just rolling", function(state)
