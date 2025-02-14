@@ -12,7 +12,7 @@ end)
 local isRolling = false  -- This fvariable will control the rolling state
 
 -- Toggle for starting and stopping the rolling action
-MainSection:NewToggle("AutoRoll", "just rolling", function(state)
+MainSection:NewToggle("UnSafe AutoRoll", "just rolling", function(state)
     isRolling = state  -- Set rolling state based on toggle
 
     if isRolling then
@@ -28,17 +28,25 @@ end)
 local isAutoRollEnabled = false
 
 MainSection:NewToggle("Safe AutoRoll", "", function(state)
-    isAutoRollEnabled = state
-    if isAutoRollEnabled then
-        spawn(function()
-            local VirtualInputManager = game:GetService("VirtualInputManager")
-            while isAutoRollEnabled do
-                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
-                wait(0.1)
-                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
-                wait(0.5)
-            end
-        end)
+    if state then
+        local VirtualInputManager = game:GetService("VirtualInputManager")
+        
+        -- Нажатие клавиши R
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+        wait(0.1)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+        wait(0.75)
+        
+        -- Клик по координатам X 378 Y 898
+        VirtualInputManager:SendMouseButtonEvent(378, 898, 0, true, game, 0)
+        wait(0)
+        VirtualInputManager:SendMouseButtonEvent(378, 898, 0, false, game, 0)
+        wait(0)
+        
+        -- Клик по координатам X 1326 Y 905
+        VirtualInputManager:SendMouseButtonEvent(1326, 905, 0, true, game, 0)
+        wait(0)
+        VirtualInputManager:SendMouseButtonEvent(1326, 905, 0, false, game, 0)
     end
 end)
 
