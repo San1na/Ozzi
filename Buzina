@@ -24,6 +24,24 @@ MainSection:NewToggle("AutoRoll", "just rolling", function(state)
     end
 end)
 
+-- Safe AutoRoll
+local isAutoRollEnabled = false
+
+MainSection:NewToggle("Safe AutoRoll", "", function(state)
+    isAutoRollEnabled = state
+    if isAutoRollEnabled then
+        spawn(function()
+            local VirtualInputManager = game:GetService("VirtualInputManager")
+            while isAutoRollEnabled do
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+                wait(0.5)
+            end
+        end)
+    end
+end)
+
 MainSection:NewToggle("Collect All Orbs", "", function(state)
     local thingsFolder = workspace:FindFirstChild("__THINGS")
 
