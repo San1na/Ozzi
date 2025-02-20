@@ -1,0 +1,342 @@
+local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
+local Window = OrionLib:MakeWindow({Name = "💕Buzina😘", TestMode = true, SaveConfig = true, ConfigFolder = "Buzina"})
+
+local Tab = Window:MakeTab({
+	Name = "Home",
+	Icon = "rbxassetid://4483345998",
+	TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Farm"
+})
+
+local UnSafeAutoRoll = false  -- Флаг для остановки цикла
+
+Tab:AddToggle({
+	Name = "UnSafe AutoRoll",
+	Default = false,
+	Callback = function(Value)
+        UnSafeAutoRoll = Value  -- Устанавливаем значение флага
+        if UnSafeAutoRoll then
+            task.spawn(function()  -- Запускаем в отдельном потоке, чтобы не зависала игра
+                while UnSafeAutoRoll do
+                    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Eggs_Roll"):InvokeServer()
+                    wait(0.5)  -- Задержка в 0.5 секунды
+                end
+            end)
+        end
+	end
+})
+
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local function SafeAutoRoll()
+    -- Нажатие клавиши R
+    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+    wait(0.1)
+    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+    wait(0.75)
+
+    -- Клик по координатам X 378 Y 898
+    VirtualInputManager:SendMouseButtonEvent(378, 898, 0, true, game, 0)
+    wait(0.1)
+    VirtualInputManager:SendMouseButtonEvent(378, 898, 0, false, game, 0)
+    wait(0.1)
+
+    -- Клик по координатам X 1326 Y 905
+    VirtualInputManager:SendMouseButtonEvent(1326, 905, 0, true, game, 0)
+    wait(0.1)
+    VirtualInputManager:SendMouseButtonEvent(1326, 905, 0, false, game, 0)
+end
+
+Tab:AddToggle({
+	Name = "Safe AutoRoll",
+	Default = false,
+	Callback = function(Value)
+        if Value then
+            task.spawn(SafeAutoRoll)  -- Выполняем один раз в отдельном потоке
+        end
+	end    
+})
+
+Tab:AddButton({
+	Name = "Collect All Orbs",
+	Callback = function()
+    local thingsFolder = workspace:FindFirstChild("__THINGS")
+
+    if thingsFolder then
+        local orbsFolder = thingsFolder:FindFirstChild("Orbs")
+                orbsFolder:Destroy() -- Удаляем папку
+    end
+  	end    
+})
+
+Tab:AddToggle({
+    Name = "AutoUse CrystalKey",
+    Default = false,
+    Callback = function(Value)
+        local toggled = Value
+
+        while toggled do
+            local args = {
+                [1] = 1,
+                [2] = false
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
+            wait(0) -- Задержка 0 секунд
+        end
+    end    
+})
+
+Tab:AddToggle({
+    Name = "AutoUse SecretKey",
+    Default = false,
+    Callback = function(Value)
+        local toggled = Value
+
+        while toggled do
+            local args = {
+                [1] = 1,
+                [2] = true
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
+            wait(0) -- Задержка 0 секунд
+        end
+    end    
+})
+
+Tab:AddToggle({
+    Name = "AutoBuy StandartMerchant",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoBuyStandardMerchant = Value
+
+        if Value then
+            spawn(function()
+                while _G.AutoBuyStandardMerchant do
+                    for i = 1, 6 do
+                        local args = { [1] = "StandardMerchant", [2] = i }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+                    end
+                    wait(0.35) -- Интервал между покупками
+                end
+            end)
+        end
+    end    
+})
+
+Tab:AddToggle({
+    Name = "AutoBuy PotionVendingMachine",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoBuyPotionVendingMachine = Value
+
+        if Value then
+            spawn(function()
+                while _G.AutoBuyPotionVendingMachine do
+                    local args = { [1] = "PotionVendingMachine" }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("VendingMachines_Purchase"):InvokeServer(unpack(args))
+                    wait(0.35)
+                end
+            end)
+        end
+    end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "Valentine",
+	Icon = "rbxassetid://11752855970",
+	TestersOnly = false
+})
+
+local VAutoRoll = false  -- Флаг для остановки цикла
+
+Tab:AddToggle({
+	Name = "Valentine Board AutoRoll",
+	Default = false,
+	Callback = function(Value)
+        VAutoRoll = Value  -- Устанавливаем значение флага
+        if VAutoRoll then
+            task.spawn(function()  -- Запускаем в отдельном потоке, чтобы не зависала игра
+    local args = {"Valentines"}
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+    local network = replicatedStorage:WaitForChild("Network")
+    local boardRoll = network:WaitForChild("Board_Roll")
+    
+    while VAutoRoll do
+        boardRoll:InvokeServer(unpack(args))
+        wait(0.5)  -- Ожидание 0.75 секунды перед следующим вызовом
+                end
+            end)
+        end
+	end  
+})
+
+local Tab = Window:MakeTab({
+	Name = "Fishing",
+	Icon = "rbxassetid://11752855970",
+	TestersOnly = false
+})
+
+local originalSize = nil
+local originalPosition = nil
+
+Tab:AddToggle({
+    Name = "Normal AutoFish",
+    Default = false,
+    Callback = function(Value)
+        local padGlow = workspace:FindFirstChild("MAP") 
+            and workspace.MAP:FindFirstChild("INTERACT")
+            and workspace.MAP.INTERACT:FindFirstChild("FishingPads") 
+            and workspace.MAP.INTERACT.FishingPads:FindFirstChild("Default") 
+            and workspace.MAP.INTERACT.FishingPads.Default:FindFirstChild("PadGlow")
+
+        if not padGlow then
+            warn("PadGlow не найден!")
+            return
+        end
+
+        -- Если это первый раз, сохраняем исходные значения
+        if not originalSize or not originalPosition then
+            originalSize = padGlow.Size
+            originalPosition = padGlow.Position
+        end
+
+        if Value then
+            print("Увеличение объекта")
+            padGlow.Size = Vector3.new(originalSize.X * 100, originalSize.Y, originalSize.Z * 100)
+            padGlow.Anchored = true
+            padGlow.CanCollide = false
+        else
+            print("Сброс объекта к исходному виду")
+            padGlow.Size = originalSize
+            padGlow.Position = originalPosition
+        end
+    end
+})
+
+local originalSize = nil
+local originalPosition = nil
+
+Tab:AddToggle({
+    Name = "Ice AutoFish",
+    Default = false,
+    Callback = function(Value)
+        local padGlow = workspace:FindFirstChild("MAP") 
+            and workspace.MAP:FindFirstChild("INTERACT")
+            and workspace.MAP.INTERACT:FindFirstChild("FishingPads") 
+            and workspace.MAP.INTERACT.FishingPads:FindFirstChild("Ice") 
+            and workspace.MAP.INTERACT.FishingPads.Ice:FindFirstChild("PadGlow")
+
+        if not padGlow then
+            warn("PadGlow не найден!")
+            return
+        end
+
+        -- Если это первый раз, сохраняем исходные значения
+        if not originalSize or not originalPosition then
+            originalSize = padGlow.Size
+            originalPosition = padGlow.Position
+        end
+
+        if Value then
+            print("Увеличение объекта")
+            padGlow.Size = Vector3.new(originalSize.X * 100, originalSize.Y, originalSize.Z * 100)
+            padGlow.Anchored = true
+            padGlow.CanCollide = false
+        else
+            print("Сброс объекта к исходному виду")
+            padGlow.Size = originalSize
+            padGlow.Position = originalPosition
+        end
+    end
+})
+
+local originalSize = nil
+local originalPosition = nil
+
+Tab:AddToggle({
+    Name = "Corrupt AutoFish",
+    Default = false,
+    Callback = function(Value)
+        local padGlow = workspace:FindFirstChild("MAP") 
+            and workspace.MAP:FindFirstChild("INTERACT")
+            and workspace.MAP.INTERACT:FindFirstChild("FishingPads") 
+            and workspace.MAP.INTERACT.FishingPads:FindFirstChild("Corrupted") 
+            and workspace.MAP.INTERACT.FishingPads.Corrupted:FindFirstChild("PadGlow")
+
+        if not padGlow then
+            warn("PadGlow не найден!")
+            return
+        end
+
+        -- Если это первый раз, сохраняем исходные значения
+        if not originalSize or not originalPosition then
+            originalSize = padGlow.Size
+            originalPosition = padGlow.Position
+        end
+
+        if Value then
+            print("Увеличение объекта")
+            padGlow.Size = Vector3.new(originalSize.X * 100, originalSize.Y, originalSize.Z * 100)
+            padGlow.Anchored = true
+            padGlow.CanCollide = false
+        else
+            print("Сброс объекта к исходному виду")
+            padGlow.Size = originalSize
+            padGlow.Position = originalPosition
+        end
+    end
+})
+
+_G.AutoBuyFishingMerchant = false
+_G.AutoBuyIceFishingMerchant = false
+
+local function purchaseFishingMerchant()
+    for i = 1, 6 do
+        local args = {"FishingMerchant", i}
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+    end
+end
+
+local function purchaseIceFishingMerchant()
+    for i = 1, 6 do
+        local args = {"IceFishingMerchant", i}
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CustomMerchants_Purchase"):InvokeServer(unpack(args))
+    end
+end
+
+local function startAutoBuying()
+    while _G.AutoBuyFishingMerchant or _G.AutoBuyIceFishingMerchant do
+        if _G.AutoBuyFishingMerchant then
+            purchaseFishingMerchant()
+        end
+        if _G.AutoBuyIceFishingMerchant then
+            purchaseIceFishingMerchant()
+        end
+        wait(0.35)
+    end
+end
+
+Tab:AddToggle({
+    Name = "AutoBuy Fishing Merchant",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoBuyFishingMerchant = Value
+        if Value then
+            spawn(startAutoBuying)
+        end
+    end    
+})
+
+Tab:AddToggle({
+    Name = "AutoBuy IceFishing Merchant",
+    Default = false,
+    Callback = function(Value)
+        _G.AutoBuyIceFishingMerchant = Value
+        if Value then
+            spawn(startAutoBuying)
+        end
+    end    
+})
