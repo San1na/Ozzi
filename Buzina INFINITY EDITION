@@ -8,7 +8,7 @@ local Tab = Window:MakeTab({
 })
 
 local Section = Tab:AddSection({
-	Name = "Farm"
+	Name = "Roll"
 })
 
 local UnSafeAutoRoll = false  -- Флаг для остановки цикла
@@ -60,6 +60,10 @@ Tab:AddToggle({
 	end    
 })
 
+local Section = Tab:AddSection({
+	Name = "Orbs"
+})
+
 Tab:AddButton({
 	Name = "Collect All Orbs",
 	Callback = function()
@@ -72,38 +76,8 @@ Tab:AddButton({
   	end    
 })
 
-Tab:AddToggle({
-    Name = "AutoUse CrystalKey",
-    Default = false,
-    Callback = function(Value)
-        local toggled = Value
-
-        while toggled do
-            local args = {
-                [1] = 1,
-                [2] = false
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
-            wait(0) -- Задержка 0 секунд
-        end
-    end    
-})
-
-Tab:AddToggle({
-    Name = "AutoUse SecretKey",
-    Default = false,
-    Callback = function(Value)
-        local toggled = Value
-
-        while toggled do
-            local args = {
-                [1] = 1,
-                [2] = true
-            }
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
-            wait(0) -- Задержка 0 секунд
-        end
-    end    
+local Section = Tab:AddSection({
+	Name = "Merchants"
 })
 
 Tab:AddToggle({
@@ -142,6 +116,399 @@ Tab:AddToggle({
             end)
         end
     end    
+})
+
+local Section = Tab:AddSection({
+	Name = "Other"
+})
+
+Tab:AddButton({
+	Name = "Removes Lags From Opening Lootboxes",
+	Callback = function()
+local replicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Путь к эффектам конфетти
+local confetti1 = replicatedStorage:FindFirstChild("Library") and replicatedStorage.Library.Client.GUIFX:FindFirstChild("Confetti")
+local confetti2 = replicatedStorage:FindFirstChild("Library") and replicatedStorage.Library.Client.WorldFX:FindFirstChild("Confetti")
+
+if confetti1 then
+    confetti1:Destroy()
+end
+
+if confetti2 then
+    confetti2:Destroy()
+ end
+  	end    
+})
+
+Tab:AddSlider({
+	Name = "WalkSpeed",
+	Min = 16,
+	Max = 500,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+    	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
+})
+
+Tab:AddSlider({
+	Name = "JumpSpeed",
+	Min = 50,
+	Max = 500,
+	Default = 50,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "JumpSpeed",
+	Callback = function(Value)
+    	game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+	end    
+})
+
+local CurrentFPS = 60
+
+-- Функция для изменения FPS
+local function ChangeFPS(value)
+    CurrentFPS = value
+    setfflag("TaskSchedulerTargetFps", tostring(value))
+    print("FPS limit set to:", value)
+end
+
+Tab:AddSlider({
+	Name = "Fps Limit",
+	Min = 15,
+	Max = 144,
+	Default = 60,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Change Fps Limit",
+	Callback = function(Value)
+    ChangeFPS(value)
+	end    
+})
+
+Tab:AddButton({
+	Name = "ServerHop",
+	Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local PlaceId = game.PlaceId
+
+local function serverHop()
+    -- Получаем список доступных серверов
+    local servers = {}
+    local cursor = nil
+    local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+    
+    repeat
+        local response = game:HttpGet(cursor and (url .. "&cursor=" .. cursor) or url)
+        local data = game:GetService("HttpService"):JSONDecode(response)
+        
+        for _, server in pairs(data.data) do
+            if server.playing < server.maxPlayers then
+                table.insert(servers, server.id)
+            end
+        end
+        
+        cursor = data.nextPageCursor
+    until not cursor or #servers > 0
+
+    if #servers > 0 then
+        -- Переносим игрока на случайный сервер
+        local randomServer = servers[math.random(1, #servers)]
+        TeleportService:TeleportToPlaceInstance(PlaceId, randomServer, Players.LocalPlayer)
+    else
+        print(".")
+    end
+end
+
+-- Вызов функции
+serverHop()
+  	end    
+})
+
+Tab:AddButton({
+	Name = "AntiAfk",
+	Callback = function()
+        repeat wait() until game:IsLoaded() and game.Players and game.Players.LocalPlayer and game.Players.LocalPlayer.Character
+
+if getgenv().AntiAfkExecuted and thisoneissocoldww then 
+    getgenv().AntiAfkExecuted = false
+	getgenv().zamanbaslaticisi = false
+	game.CoreGui.thisoneissocoldww:Destroy()
+end
+
+getgenv().AntiAfkExecuted = true
+
+local thisoneissocoldww = Instance.new("ScreenGui")
+local madebybloodofbatus = Instance.new("Frame")
+local UICornerw = Instance.new("UICorner")
+local DestroyButton = Instance.new("TextButton")
+local uselesslabelone = Instance.new("TextLabel")
+local timerlabel = Instance.new("TextLabel")
+local uselesslabeltwo = Instance.new("TextLabel")
+local fpslabel = Instance.new("TextLabel")
+local uselesslabelthree = Instance.new("TextLabel")
+local pinglabel = Instance.new("TextLabel")
+local uselessframeone = Instance.new("Frame")
+local UICornerww = Instance.new("UICorner")
+local uselesslabelfour = Instance.new("TextLabel")
+
+--Properties:
+
+thisoneissocoldww.Name = "thisoneissocoldww"
+thisoneissocoldww.Parent = game.CoreGui
+thisoneissocoldww.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+madebybloodofbatus.Name = "madebybloodofbatus"
+madebybloodofbatus.Parent = thisoneissocoldww
+madebybloodofbatus.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+madebybloodofbatus.Position = UDim2.new(0.0854133144, 0, 0.13128835, 0)
+madebybloodofbatus.Size = UDim2.new(0, 225, 0, 96)
+
+UICornerw.Name = "UICornerw"
+UICornerw.Parent = madebybloodofbatus
+
+DestroyButton.Name = "DestroyButton"
+DestroyButton.Parent = madebybloodofbatus
+DestroyButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+DestroyButton.BackgroundTransparency = 1.000
+DestroyButton.Position = UDim2.new(0.871702373, 0, 0.0245379955, 0)
+DestroyButton.Size = UDim2.new(0, 27, 0, 15)
+DestroyButton.Font = Enum.Font.SourceSans
+DestroyButton.Text = "X"
+DestroyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+DestroyButton.TextSize = 14.000
+
+DestroyButton.MouseButton1Click:connect(function()
+	getgenv().AntiAfkExecuted = false
+	
+	wait(0.1)
+	thisoneissocoldww:Destroy()
+end)
+
+uselesslabelone.Name = "uselesslabelone"
+uselesslabelone.Parent = madebybloodofbatus
+uselesslabelone.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabelone.BackgroundTransparency = 1.000
+uselesslabelone.Position = UDim2.new(0.302473009, 0, 0, 0)
+uselesslabelone.Size = UDim2.new(0, 95, 0, 24)
+uselesslabelone.Font = Enum.Font.SourceSans
+uselesslabelone.Text = "Anti Afk By titela42"
+uselesslabelone.TextColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabelone.TextSize = 14.000
+
+timerlabel.Name = "timerlabel"
+timerlabel.Parent = madebybloodofbatus
+timerlabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+timerlabel.BackgroundTransparency = 1.000
+timerlabel.Position = UDim2.new(0.65344125, 0, 0.68194294, 0)
+timerlabel.Size = UDim2.new(0, 60, 0, 24)
+timerlabel.Font = Enum.Font.SourceSans
+timerlabel.Text = "0:0:0"
+timerlabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timerlabel.TextSize = 14.000
+
+uselesslabeltwo.Name = "uselesslabeltwo"
+uselesslabeltwo.Parent = madebybloodofbatus
+uselesslabeltwo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabeltwo.BackgroundTransparency = 1.000
+uselesslabeltwo.Position = UDim2.new(0.038864471, 0, 0.373806685, 0)
+uselesslabeltwo.Size = UDim2.new(0, 29, 0, 24)
+uselesslabeltwo.Font = Enum.Font.SourceSans
+uselesslabeltwo.Text = "Ping: "
+uselesslabeltwo.TextColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabeltwo.TextSize = 14.000
+
+fpslabel.Name = "fpslabel"
+fpslabel.Parent = madebybloodofbatus
+fpslabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+fpslabel.BackgroundTransparency = 1.000
+fpslabel.Position = UDim2.new(0.724226236, 0, 0.358796299, 0)
+fpslabel.Size = UDim2.new(0, 55, 0, 24)
+fpslabel.Font = Enum.Font.SourceSans
+fpslabel.Text = "this contact dev"
+fpslabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpslabel.TextSize = 14.000
+
+uselesslabelthree.Name = "uselesslabelthree"
+uselesslabelthree.Parent = madebybloodofbatus
+uselesslabelthree.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabelthree.BackgroundTransparency = 1.000
+uselesslabelthree.Position = UDim2.new(0.506917477, 0, 0.352585167, 0)
+uselesslabelthree.Size = UDim2.new(0, 26, 0, 24)
+uselesslabelthree.Font = Enum.Font.SourceSans
+uselesslabelthree.Text = "Fps: "
+uselesslabelthree.TextColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabelthree.TextSize = 14.000
+
+pinglabel.Name = "pinglabel"
+pinglabel.Parent = madebybloodofbatus
+pinglabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+pinglabel.BackgroundTransparency = 1.000
+pinglabel.Position = UDim2.new(0.20330891, 0, 0.371578127, 0)
+pinglabel.Size = UDim2.new(0, 55, 0, 24)
+pinglabel.Font = Enum.Font.SourceSans
+pinglabel.Text = "if you see this"
+pinglabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+pinglabel.TextSize = 14.000
+pinglabel.TextWrapped = true
+
+uselessframeone.Name = "uselessframeone"
+uselessframeone.Parent = madebybloodofbatus
+uselessframeone.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+uselessframeone.Position = UDim2.new(0.00444444455, 0, 0.243312627, 0)
+uselessframeone.Size = UDim2.new(0, 224, 0, 5)
+
+UICornerww.CornerRadius = UDim.new(0, 50)
+UICornerww.Name = "UICornerww"
+UICornerww.Parent = uselessframeone
+
+uselesslabelfour.Name = "uselesslabelfour"
+uselesslabelfour.Parent = madebybloodofbatus
+uselesslabelfour.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabelfour.BackgroundTransparency = 1.000
+uselesslabelfour.Position = UDim2.new(0.0580285639, 0, 0.8125, 0)
+uselesslabelfour.Size = UDim2.new(0, 95, 0, 12)
+uselesslabelfour.Font = Enum.Font.SourceSans
+uselesslabelfour.Text = "Anti-Afk Auto Enabled"
+uselesslabelfour.TextColor3 = Color3.fromRGB(255, 255, 255)
+uselesslabelfour.TextSize = 14.000
+
+
+
+local Drag = game.CoreGui.thisoneissocoldww.madebybloodofbatus
+gsCoreGui = game:GetService("CoreGui")
+gsTween = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local dragging
+local dragInput
+local dragStart
+local startPos
+local function update(input)
+	local delta = input.Position - dragStart
+	local dragTime = 0.04
+	local SmoothDrag = {}
+	SmoothDrag.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	local dragSmoothFunction = gsTween:Create(Drag, TweenInfo.new(dragTime, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), SmoothDrag)
+	dragSmoothFunction:Play()
+end
+Drag.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = Drag.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+Drag.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging and Drag.Size then
+		update(input)
+	end
+end)
+
+
+
+local bbbatusxxxddddd = game:service'VirtualUser'
+
+game:service'Players'.LocalPlayer.Idled:connect(function()
+	bbbatusxxxddddd:CaptureController()
+	bbbatusxxxddddd:ClickButton2(Vector2.new())
+end)
+
+
+
+
+local FPSsLabel = fpslabel
+local RunService = game:GetService("RunService")
+local RenderStepped = RunService.RenderStepped
+local sec = nil
+local FPS = {}
+
+local function fre()
+	local fr = tick()
+	for index = #FPS,1,-1 do
+		FPS[index + 1] = (FPS[index] >= fr - 1) and FPS[index] or nil
+	end
+	FPS[1] = fr
+	local fps = (tick() - sec >= 1 and #FPS) or (#FPS / (tick() - sec))
+	fps = math.floor(fps)
+	fpslabel.Text = fps
+end
+
+
+sec = tick()
+RenderStepped:Connect(fre)
+
+
+
+
+spawn(function()
+	repeat
+		wait(1)
+		local ping = tonumber(game:GetService("Stats"):FindFirstChild("PerformanceStats").Ping:GetValue())
+		ping = math.floor(ping)
+		pinglabel.Text = ping
+
+
+
+	until pinglabel == nil
+end)
+
+local saniye = 0
+
+
+
+local dakika = 0
+
+
+
+local saat = 0
+
+
+
+
+getgenv().zamanbaslaticisi = true
+
+while true do
+
+
+		if getgenv().zamanbaslaticisi then
+
+			saniye = saniye + 1
+
+			wait(1)
+
+		end --if zaman baslaticisi end
+
+
+		if saniye >= 60 then
+			saniye = 0
+			dakika = dakika + 1
+
+		end --if saniye 60 end
+
+
+		if dakika >= 60 then
+			dakika = 0
+			saat = saat + 1
+
+		end --if dakika 60 end
+
+		timerlabel.Text = saat..":"..dakika..":"..saniye
+	end
+  	end    
 })
 
 local Tab = Window:MakeTab({
@@ -290,6 +657,10 @@ Tab:AddToggle({
     end
 })
 
+local Section = Tab:AddSection({
+	Name = "Merchants"
+})
+
 _G.AutoBuyFishingMerchant = false
 _G.AutoBuyIceFishingMerchant = false
 
@@ -340,3 +711,340 @@ Tab:AddToggle({
         end
     end    
 })
+
+local Tab = Window:MakeTab({
+	Name = "Mining",
+	Icon = "rbxassetid://4483345998",
+	TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Mining"
+})
+
+-- Таблица для хранения исходных размеров и позиций
+local oreData = {}
+
+-- Список руд
+local ores = {
+    "Dirt Ore", "Stone Ore", "Bronze Ore", "Iron Ore",
+    "Gold Ore", "Emerald Ore", "Obsidian Ore",
+    "Runic Ore", "Magma Ore"
+}
+
+-- Функция для создания переключателей
+local function createOreToggle(oreName)
+    Tab:AddToggle({
+        Name = oreName,
+        Default = false,
+        Callback = function(Value)
+            local miningPads = workspace:FindFirstChild("MAP") 
+                and workspace.MAP:FindFirstChild("INTERACT")
+                and workspace.MAP.INTERACT:FindFirstChild("MiningPads")
+
+            if not miningPads then
+                warn("MiningPads не найден!")
+                return
+            end
+
+            local padGlow = miningPads:FindFirstChild(oreName) 
+                and miningPads[oreName]:FindFirstChild("PadGlow")
+
+            if not padGlow then
+                warn(oreName .. " PadGlow не найден!")
+                return
+            end
+
+            -- Сохраняем исходные размеры и позиции только один раз
+            if not oreData[oreName] then
+                oreData[oreName] = { Size = padGlow.Size, Position = padGlow.Position }
+            end
+
+            if Value then
+                print("Увеличение " .. oreName)
+                padGlow.Size = Vector3.new(oreData[oreName].Size.X * 100, oreData[oreName].Size.Y, oreData[oreName].Size.Z * 100)
+                padGlow.Anchored = true
+                padGlow.CanCollide = false
+            else
+                print("Сброс " .. oreName)
+                padGlow.Size = oreData[oreName].Size
+                padGlow.Position = oreData[oreName].Position
+            end
+        end
+    })
+end
+
+-- Создание переключателей для всех руд
+for _, oreName in ipairs(ores) do
+    createOreToggle(oreName)
+end
+
+local Section = Tab:AddSection({
+    Name = "Merchant"
+})
+
+local isAutoMerchantEnabled = false -- Флаг активности функции
+
+local function performPurchase()
+    while isAutoMerchantEnabled do
+        local replicatedStorage = game:GetService("ReplicatedStorage")
+        local network = replicatedStorage:FindFirstChild("Network")
+
+        if network then
+            local customMerchant = network:FindFirstChild("CustomMerchants_Purchase")
+            if customMerchant then
+                for i = 1, 8 do -- Цикл с 1 до 8
+                    if not isAutoMerchantEnabled then return end -- Остановка, если авто-скупка выключена
+
+                    local args = {
+                        [1] = "MiningMerchant",
+                        [2] = i, -- Индекс покупки
+                    }
+
+                    local success, err = pcall(function()
+                        customMerchant:InvokeServer(unpack(args))
+                    end)
+
+                    if not success then
+                        warn("Ошибка при выполнении InvokeServer: " .. tostring(err))
+                    end
+
+                    wait(0.35) -- Задержка между покупками
+                end
+            else
+                warn("Не найден объект CustomMerchants_Purchase")
+                return
+            end
+        else
+            warn("Не найден объект Network в ReplicatedStorage")
+            return
+        end
+
+        wait(0.35) -- Дополнительная задержка между циклами
+    end
+end
+
+Tab:AddToggle({
+    Name = "AutoBuy MiningMerchant",
+    Default = false,
+    Callback = function(Value)
+        isAutoMerchantEnabled = Value -- Переключаем флаг
+        if isAutoMerchantEnabled then
+            task.spawn(performPurchase) -- Запускаем в новом потоке
+        end
+    end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "AutoUse/Open",
+	Icon = "rbxassetid://11752855970",
+	TestersOnly = false
+})
+
+
+local Section = Tab:AddSection({
+	Name = "Keys"
+})
+
+Tab:AddToggle({
+    Name = "CrystalKey",
+    Default = false,
+    Callback = function(Value)
+        local toggled = Value
+
+        while toggled do
+            local args = {
+                [1] = 1,
+                [2] = false
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
+            wait(0) -- Задержка 0 секунд
+        end
+    end    
+})
+
+Tab:AddToggle({
+    Name = "SecretKey",
+    Default = false,
+    Callback = function(Value)
+        local toggled = Value
+
+        while toggled do
+            local args = {
+                [1] = 1,
+                [2] = true
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("LootChest_Unlock"):InvokeServer(unpack(args))
+            wait(0) -- Задержка 0 секунд
+        end
+    end    
+})
+
+local Section = Tab:AddSection({
+    Name = "Mining Chests"
+})
+
+local toggles = {}
+
+local function startLoop(lootboxID)
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Save = require(ReplicatedStorage.Library.Client.Save)
+    local Inventory = Save.Get()["Inventory"]
+    local RNS = ReplicatedStorage:WaitForChild("Network")
+    
+    while toggles[lootboxID] do
+        for i, v in pairs(Inventory.Lootbox) do
+            if v.id == lootboxID then
+                local args = {
+                    [1] = i,
+                    [2] = 50
+                }
+                RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+            end
+        end
+        task.wait(0)
+    end
+end
+
+Tab:AddToggle({
+    Name = "Basic",
+    Default = false,
+    Callback = function(Value)
+        toggles["Basic Mining Chest"] = Value
+        if Value then
+            task.spawn(function()
+                startLoop("Basic Mining Chest")
+            end)
+        end
+    end
+})
+
+Tab:AddToggle({
+    Name = "Rare",
+    Default = false,
+    Callback = function(Value)
+        toggles["Rare Mining Chest"] = Value
+        if Value then
+            task.spawn(function()
+                startLoop("Rare Mining Chest")
+            end)
+        end
+    end
+})
+
+Tab:AddToggle({
+    Name = "Epic",
+    Default = false,
+    Callback = function(Value)
+        toggles["Epic Mining Chest"] = Value
+        if Value then
+            task.spawn(function()
+                startLoop("Epic Mining Chest")
+            end)
+        end
+    end
+})
+
+Tab:AddToggle({
+    Name = "Legendary",
+    Default = false,
+    Callback = function(Value)
+        toggles["Legendary Mining Chest"] = Value
+        if Value then
+            task.spawn(function()
+                startLoop("Legendary Mining Chest")
+            end)
+        end
+    end
+})
+
+Tab:AddToggle({
+    Name = "Celestial",
+    Default = false,
+    Callback = function(Value)
+        toggles["Celestial Mining Chest"] = Value
+        if Value then
+            task.spawn(function()
+                startLoop("Celestial Mining Chest")
+            end)
+        end
+    end
+})
+
+Tab:AddToggle({
+    Name = "Runic",
+    Default = false,
+    Callback = function(Value)
+        toggles["Runic Mining Chest"] = Value
+        if Value then
+            task.spawn(function()
+                startLoop("Runic Mining Chest")
+            end)
+        end
+    end
+})
+
+Tab:AddToggle({
+    Name = "AutoBuy MiningMerchant",
+    Default = false,
+    Callback = function(Value)
+        isAutoMerchantEnabled = Value -- Переключаем флаг
+        if isAutoMerchantEnabled then
+            task.spawn(performPurchase) -- Запускаем в новом потоке
+        end
+    end    
+})
+
+local Tab = Window:MakeTab({
+    Name = "Statistic",
+    Icon = "rbxassetid://11752855970",
+    TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Your Best Roll"
+})
+
+-- Function to format large numbers
+local function formatNumber(number)
+    if number >= 1e9 then
+        return string.format("%.1fB", number / 1e9)
+    elseif number >= 1e6 then
+        return string.format("%.1fM", number / 1e6)
+    elseif number >= 1e3 then
+        return string.format("%.1fK", number / 1e3)
+    else
+        return tostring(number)
+    end
+end
+
+-- Add an initial label for "Best Roll"
+local bestRollLabel = Tab:AddLabel("Best Roll: 0")
+
+-- Function to update the label with the current value of "Best Roll"
+local function updateBestRoll()
+    local bestRollValue = game:GetService("Players").LocalPlayer.leaderstats["\240\159\145\145 Best Roll"].Value
+    bestRollLabel:Set("Best Roll: " .. formatNumber(bestRollValue))
+end
+
+local Section2 = Tab:AddSection({
+    Name = "Your Total Rolls"
+})
+
+-- Add an initial label for "Rolls"
+local rollsLabel = Tab:AddLabel("Rolls: 0")
+
+-- Function to update the label with the current value of "Rolls"
+local function updateRolls()
+    local rollsValue = game:GetService("Players").LocalPlayer.leaderstats["\240\159\142\178 Rolls"].Value
+    rollsLabel:Set("Rolls: " .. formatNumber(rollsValue))
+end
+
+-- Combined update loop for both "Best Roll" and "Rolls"
+while true do
+    wait(0.1)  -- Wait for 0.1 seconds
+    updateBestRoll()  -- Update the "Best Roll" label
+    updateRolls()  -- Update the "Rolls" label
+end
+
+OrionLib:Init()
