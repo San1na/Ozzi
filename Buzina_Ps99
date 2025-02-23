@@ -12,6 +12,7 @@ local Section = Tab:AddSection({
 })
 
 local autoRolling = false
+local rollingTask
 
 Tab:AddToggle({
 	Name = "UnSafe AutoRoll",
@@ -19,30 +20,31 @@ Tab:AddToggle({
 	Callback = function(Value)
 		autoRolling = Value
 
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		local Save = require(ReplicatedStorage.Library.Client.Save)
-		local Inventory = Save.Get()["Inventory"]
-		local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
-		local RS = game:GetService("ReplicatedStorage")
-
-		local function autoOpenLootbox()
-		    while autoRolling do
-		        for i, v in pairs(Inventory.Lootbox) do
-		            if v.id == "Retro Pack" then
-		                local args = {
-		                    [1] = i,
-		                    [2] = 8
-		                }
-
-		                RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
-		            end
-		        end
-		        wait(0.5)
-		    end
-		end
-
 		if autoRolling then
-		    spawn(autoOpenLootbox)
+		    rollingTask = task.spawn(function()
+		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		        local Save = require(ReplicatedStorage.Library.Client.Save)
+		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+
+		        while autoRolling do
+		            local Inventory = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
+		            for i, v in pairs(Inventory.Lootbox) do
+		                if v.id == "Retro Pack" then
+		                    local args = {
+		                        [1] = i,
+		                        [2] = 8
+		                    }
+
+		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+		                end
+		            end
+		            task.wait(0.5)
+		        end
+		    end)
+		else
+		    if rollingTask then
+		        task.cancel(rollingTask)
+		    end
 		end
 	end
 })
