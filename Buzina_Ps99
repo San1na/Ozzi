@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet("https://twicyou/Orion.txt", true))()
+local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
 local Window = OrionLib:MakeWindow({Name = "💕Buzina😘", TestMode = true, SaveConfig = true, ConfigFolder = "Buzina"})
 
 local Tab = Window:MakeTab({
@@ -15,7 +15,7 @@ local autoRolling = false
 local rollingTask
 
 Tab:AddToggle({
-	Name = "UnSafe AutoRoll",
+	Name = "AutoUnpack Card",
 	Default = false,
 	Callback = function(Value)
 		autoRolling = Value
@@ -27,7 +27,7 @@ Tab:AddToggle({
 		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 
 		        while autoRolling do
-		            local Inventory = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
+		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
 		            for i, v in pairs(Inventory.Lootbox) do
 		                if v.id == "Retro Pack" then
 		                    local args = {
@@ -47,4 +47,42 @@ Tab:AddToggle({
 		    end
 		end
 	end
+})
+
+Tab:AddButton({
+	Name = "FastOpen Method",
+	Callback = function()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local directory = ReplicatedStorage:FindFirstChild("__DIRECTORY")
+
+if directory then
+    local lootboxes = directory:FindFirstChild("Lootboxes")
+    if lootboxes then
+        local cardPacks = lootboxes:FindFirstChild("CardPacks")
+        if cardPacks then
+            local retroPack = cardPacks:FindFirstChild("Retro Pack")
+            if retroPack then
+                local model = retroPack:FindFirstChild("Model")
+                if model then
+                    local objectsToDelete = {
+                        "InitialPoses",
+                        "AnimSaves",
+                        "cardpack_back_A_mesh",
+                        "cardpack_back_B_mesh",
+                        "cardpack_front_mesh",
+                        "RootPart"
+                    }
+                    
+                    for _, objName in ipairs(objectsToDelete) do
+                        local obj = model:FindFirstChild(objName)
+                        if obj then
+                            obj:Destroy()
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+  	end    
 })
