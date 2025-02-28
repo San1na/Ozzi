@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
+local OrionLib = loadstring(game:HttpGet("https://twicyou/Orion.txt", true))()
 local Window = OrionLib:MakeWindow({Name = "💕Buzina😘", TestMode = true, SaveConfig = true, ConfigFolder = "Buzina"})
 
 local Tab = Window:MakeTab({
