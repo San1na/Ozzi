@@ -2,7 +2,7 @@ local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
 local Window = OrionLib:MakeWindow({Name = "💕Buzina😘", TestMode = true, SaveConfig = true, ConfigFolder = "Buzina"})
 
 local Tab = Window:MakeTab({
-	Name = "Home",
+	Name = "Event",
 	Icon = "rbxassetid://4483345998",
 	TestersOnly = false
 })
@@ -15,7 +15,7 @@ local autoRolling = false
 local rollingTask
 
 Tab:AddToggle({
-	Name = "AutoUnpack Card",
+	Name = "AutoUnpack Card (Retro)",
 	Default = false,
 	Callback = function(Value)
 		autoRolling = Value
@@ -49,6 +49,112 @@ Tab:AddToggle({
 	end
 })
 
+Tab:AddToggle({
+	Name = "AutoUnpack Card (Fantasy)",
+	Default = false,
+	Callback = function(Value)
+		autoRolling = Value
+
+		if autoRolling then
+		    rollingTask = task.spawn(function()
+		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		        local Save = require(ReplicatedStorage.Library.Client.Save)
+		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+
+		        while autoRolling do
+		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
+		            for i, v in pairs(Inventory.Lootbox) do
+		                if v.id == "Fantasy Pack" then
+		                    local args = {
+		                        [1] = i,
+		                        [2] = 8
+		                    }
+
+		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+		                end
+		            end
+		            task.wait(0.5)
+		        end
+		    end)
+		else
+		    if rollingTask then
+		        task.cancel(rollingTask)
+		    end
+		end
+	end
+})
+
+Tab:AddToggle({
+	Name = "AutoUnpack Card (SuperHero)",
+	Default = false,
+	Callback = function(Value)
+		autoRolling = Value
+
+		if autoRolling then
+		    rollingTask = task.spawn(function()
+		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		        local Save = require(ReplicatedStorage.Library.Client.Save)
+		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+
+		        while autoRolling do
+		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
+		            for i, v in pairs(Inventory.Lootbox) do
+		                if v.id == "SuperHero Pack" then
+		                    local args = {
+		                        [1] = i,
+		                        [2] = 8
+		                    }
+
+		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+		                end
+		            end
+		            task.wait(0.5)
+		        end
+		    end)
+		else
+		    if rollingTask then
+		        task.cancel(rollingTask)
+		    end
+		end
+	end
+})
+
+Tab:AddToggle({
+	Name = "AutoUnpack Card (NightMare)",
+	Default = false,
+	Callback = function(Value)
+		autoRolling = Value
+
+		if autoRolling then
+		    rollingTask = task.spawn(function()
+		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		        local Save = require(ReplicatedStorage.Library.Client.Save)
+		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+
+		        while autoRolling do
+		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
+		            for i, v in pairs(Inventory.Lootbox) do
+		                if v.id == "NightMare Pack" then
+		                    local args = {
+		                        [1] = i,
+		                        [2] = 8
+		                    }
+
+		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
+		                end
+		            end
+		            task.wait(0.5)
+		        end
+		    end)
+		else
+		    if rollingTask then
+		        task.cancel(rollingTask)
+		    end
+		end
+	end
+})
+
+
 Tab:AddButton({
 	Name = "FastOpen Method",
 	Callback = function()
@@ -60,23 +166,26 @@ if directory then
     if lootboxes then
         local cardPacks = lootboxes:FindFirstChild("CardPacks")
         if cardPacks then
-            local retroPack = cardPacks:FindFirstChild("Retro Pack")
-            if retroPack then
-                local model = retroPack:FindFirstChild("Model")
-                if model then
-                    local objectsToDelete = {
-                        "InitialPoses",
-                        "AnimSaves",
-                        "cardpack_back_A_mesh",
-                        "cardpack_back_B_mesh",
-                        "cardpack_front_mesh",
-                        "RootPart"
-                    }
-                    
-                    for _, objName in ipairs(objectsToDelete) do
-                        local obj = model:FindFirstChild(objName)
-                        if obj then
-                            obj:Destroy()
+            local packNames = {"Retro Pack", "Fantasy Pack", "NightMare", "SuperHero"}
+            local objectsToDelete = {
+                "InitialPoses",
+                "AnimSaves",
+                "cardpack_back_A_mesh",
+                "cardpack_back_B_mesh",
+                "cardpack_front_mesh",
+                "RootPart"
+            }
+            
+            for _, packName in ipairs(packNames) do
+                local pack = cardPacks:FindFirstChild(packName)
+                if pack then
+                    local model = pack:FindFirstChild("Model")
+                    if model then
+                        for _, objName in ipairs(objectsToDelete) do
+                            local obj = model:FindFirstChild(objName)
+                            if obj then
+                                obj:Destroy()
+                            end
                         end
                     end
                 end
@@ -84,5 +193,1281 @@ if directory then
         end
     end
 end
+  	end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "Mail",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Sender"
+})
+
+Tab:AddButton({
+	Name = "RetroPack Sender",
+	Callback = function()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local Inventory = Save.Get()["Inventory"]
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+-- Создание GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0.3, 0, 0.5, 0)
+menuFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+menuFrame.AnchorPoint = Vector2.new(0.5, 0.5) -- Центрированное окно
+menuFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+menuFrame.BackgroundTransparency = 0.7
+menuFrame.BorderSizePixel = 0
+menuFrame.Parent = screenGui
+
+-- Добавление градиента для красивого фона
+local gradient = Instance.new("UIGradient")
+gradient.Parent = menuFrame
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+})
+gradient.Rotation = 45
+
+-- Добавление тени к меню
+local shadow = Instance.new("ImageLabel")
+shadow.Size = UDim2.new(1, 0, 1, 0)
+shadow.Position = UDim2.new(0, 5, 0, 5)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://13115536235"  -- Текстура тени
+shadow.ImageTransparency = 0.4
+shadow.Parent = menuFrame
+
+-- Создание кнопки закрытия с эффектами
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 30
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.Parent = menuFrame
+closeButton.BorderSizePixel = 0
+closeButton.AutoButtonColor = false
+
+closeButton.MouseEnter:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)  -- Светлее красный при наведении
+    closeButton.TextSize = 32  -- Немного увеличиваем размер текста
+end)
+
+closeButton.MouseLeave:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Стандартный красный
+    closeButton.TextSize = 30  -- Сброс размера текста
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    menuFrame:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Quad", 0.4, true)  -- Плавная анимация закрытия
+    wait(0.4)
+    screenGui:Destroy()
+end)
+
+-- Функция для создания текстового поля с закругленными углами
+local function createTextBox(placeholder, position)
+    local textBox = Instance.new("TextBox")
+    textBox.Size = UDim2.new(0.8, 0, 0.1, 0)
+    textBox.Position = position
+    textBox.PlaceholderText = placeholder
+    textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    textBox.Font = Enum.Font.Gotham
+    textBox.TextSize = 20
+    textBox.BorderSizePixel = 2
+    textBox.BorderColor3 = Color3.fromRGB(0, 255, 255)
+    textBox.ClipsDescendants = true
+    textBox.Parent = menuFrame
+    
+    -- Добавление закругленных углов
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = textBox
+
+    return textBox
+end
+
+local recipientTextBox = createTextBox("Recipient's Name", UDim2.new(0.1, 0, 0.1, 0))
+local senderTextBox = createTextBox("Sender's Name", UDim2.new(0.1, 0, 0.22, 0))
+local quantityTextBox = createTextBox("Quantity", UDim2.new(0.1, 0, 0.34, 0))
+
+-- Функция для создания кнопок lootbox с анимацией и эффектами
+local function createLootboxButton(slot, item)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9, 0, 0.1, 0)
+    button.Position = UDim2.new(0.05, 0, 0.46, 0)
+    button.Text = "Send " .. item.id
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 20
+    button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    button.BorderSizePixel = 0
+    button.Parent = menuFrame
+
+    -- Эффект при наведении
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(50, 255, 50)  -- Светлее зеленый
+        button.TextSize = 22  -- Немного увеличиваем размер текста
+    end)
+
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Стандартный зеленый
+        button.TextSize = 20  -- Сброс размера текста
+    end)
+
+    -- Эффект клика с анимацией
+    button.MouseButton1Click:Connect(function()
+        local recipient = recipientTextBox.Text
+        local sender = senderTextBox.Text
+        local quantity = tonumber(quantityTextBox.Text) or 1  -- По умолчанию 1, если не введено
+
+        local args = {
+            [1] = recipient,  -- Получатель
+            [2] = sender,     -- Отправитель
+            [3] = "Lootbox",  -- Тип предмета
+            [4] = slot,       -- Идентификатор предмета
+            [5] = quantity    -- Количество
+        }
+
+        -- Плавная анимация перед отправкой
+        button:TweenSize(UDim2.new(0.9, 0, 0.12, 0), "Out", "Quad", 0.2, true)
+        wait(0.2)
+        button:TweenSize(UDim2.new(0.9, 0, 0.1, 0), "In", "Quad", 0.2, true)
+
+        -- Отправка lootbox
+        Network:WaitForChild("Mailbox: Send"):InvokeServer(unpack(args))
+    end)
+
+    -- Добавление текста внизу кнопки
+    local instructionText = Instance.new("TextLabel")
+    instructionText.Size = UDim2.new(0.9, 0, 0.1, 0)  -- Ширина кнопки, высота 10% от кнопки
+    instructionText.Position = UDim2.new(0.05, 0, 0.56, 0)  -- Расположение под кнопкой
+    instructionText.Text = "Click to send lootbox"
+    instructionText.Font = Enum.Font.Gotham
+    instructionText.TextSize = 16
+    instructionText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    instructionText.BackgroundTransparency = 1  -- Без фона
+    instructionText.TextWrapped = true
+    instructionText.TextXAlignment = Enum.TextXAlignment.Center
+    instructionText.TextYAlignment = Enum.TextYAlignment.Center
+    instructionText.Parent = menuFrame
+end
+
+-- Генерация кнопок для lootbox из инвентаря
+for slot, item in pairs(Inventory.Lootbox) do
+    if item.id == "Retro Pack" then
+        createLootboxButton(slot, item)
+    end
+end
+
+-- Плавная функция перетаскивания для меню
+local dragging, dragInput, dragStart, startPos
+
+menuFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = menuFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+menuFrame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        menuFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+  	end    
+})
+
+Tab:AddButton({
+	Name = "FantasyPack Sender",
+	Callback = function()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local Inventory = Save.Get()["Inventory"]
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+-- Создание GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0.3, 0, 0.5, 0)
+menuFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+menuFrame.AnchorPoint = Vector2.new(0.5, 0.5) -- Центрированное окно
+menuFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+menuFrame.BackgroundTransparency = 0.7
+menuFrame.BorderSizePixel = 0
+menuFrame.Parent = screenGui
+
+-- Добавление градиента для красивого фона
+local gradient = Instance.new("UIGradient")
+gradient.Parent = menuFrame
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+})
+gradient.Rotation = 45
+
+-- Добавление тени к меню
+local shadow = Instance.new("ImageLabel")
+shadow.Size = UDim2.new(1, 0, 1, 0)
+shadow.Position = UDim2.new(0, 5, 0, 5)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://13115536235"  -- Текстура тени
+shadow.ImageTransparency = 0.4
+shadow.Parent = menuFrame
+
+-- Создание кнопки закрытия с эффектами
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 30
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.Parent = menuFrame
+closeButton.BorderSizePixel = 0
+closeButton.AutoButtonColor = false
+
+closeButton.MouseEnter:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)  -- Светлее красный при наведении
+    closeButton.TextSize = 32  -- Немного увеличиваем размер текста
+end)
+
+closeButton.MouseLeave:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Стандартный красный
+    closeButton.TextSize = 30  -- Сброс размера текста
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    menuFrame:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Quad", 0.4, true)  -- Плавная анимация закрытия
+    wait(0.4)
+    screenGui:Destroy()
+end)
+
+-- Функция для создания текстового поля с закругленными углами
+local function createTextBox(placeholder, position)
+    local textBox = Instance.new("TextBox")
+    textBox.Size = UDim2.new(0.8, 0, 0.1, 0)
+    textBox.Position = position
+    textBox.PlaceholderText = placeholder
+    textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    textBox.Font = Enum.Font.Gotham
+    textBox.TextSize = 20
+    textBox.BorderSizePixel = 2
+    textBox.BorderColor3 = Color3.fromRGB(0, 255, 255)
+    textBox.ClipsDescendants = true
+    textBox.Parent = menuFrame
+    
+    -- Добавление закругленных углов
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = textBox
+
+    return textBox
+end
+
+local recipientTextBox = createTextBox("Recipient's Name", UDim2.new(0.1, 0, 0.1, 0))
+local senderTextBox = createTextBox("Sender's Name", UDim2.new(0.1, 0, 0.22, 0))
+local quantityTextBox = createTextBox("Quantity", UDim2.new(0.1, 0, 0.34, 0))
+
+-- Функция для создания кнопок lootbox с анимацией и эффектами
+local function createLootboxButton(slot, item)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9, 0, 0.1, 0)
+    button.Position = UDim2.new(0.05, 0, 0.46, 0)
+    button.Text = "Send " .. item.id
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 20
+    button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    button.BorderSizePixel = 0
+    button.Parent = menuFrame
+
+    -- Эффект при наведении
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(50, 255, 50)  -- Светлее зеленый
+        button.TextSize = 22  -- Немного увеличиваем размер текста
+    end)
+
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Стандартный зеленый
+        button.TextSize = 20  -- Сброс размера текста
+    end)
+
+    -- Эффект клика с анимацией
+    button.MouseButton1Click:Connect(function()
+        local recipient = recipientTextBox.Text
+        local sender = senderTextBox.Text
+        local quantity = tonumber(quantityTextBox.Text) or 1  -- По умолчанию 1, если не введено
+
+        local args = {
+            [1] = recipient,  -- Получатель
+            [2] = sender,     -- Отправитель
+            [3] = "Lootbox",  -- Тип предмета
+            [4] = slot,       -- Идентификатор предмета
+            [5] = quantity    -- Количество
+        }
+
+        -- Плавная анимация перед отправкой
+        button:TweenSize(UDim2.new(0.9, 0, 0.12, 0), "Out", "Quad", 0.2, true)
+        wait(0.2)
+        button:TweenSize(UDim2.new(0.9, 0, 0.1, 0), "In", "Quad", 0.2, true)
+
+        -- Отправка lootbox
+        Network:WaitForChild("Mailbox: Send"):InvokeServer(unpack(args))
+    end)
+
+    -- Добавление текста внизу кнопки
+    local instructionText = Instance.new("TextLabel")
+    instructionText.Size = UDim2.new(0.9, 0, 0.1, 0)  -- Ширина кнопки, высота 10% от кнопки
+    instructionText.Position = UDim2.new(0.05, 0, 0.56, 0)  -- Расположение под кнопкой
+    instructionText.Text = "Click to send lootbox"
+    instructionText.Font = Enum.Font.Gotham
+    instructionText.TextSize = 16
+    instructionText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    instructionText.BackgroundTransparency = 1  -- Без фона
+    instructionText.TextWrapped = true
+    instructionText.TextXAlignment = Enum.TextXAlignment.Center
+    instructionText.TextYAlignment = Enum.TextYAlignment.Center
+    instructionText.Parent = menuFrame
+end
+
+-- Генерация кнопок для lootbox из инвентаря
+for slot, item in pairs(Inventory.Lootbox) do
+    if item.id == "Fantasy Pack" then
+        createLootboxButton(slot, item)
+    end
+end
+
+-- Плавная функция перетаскивания для меню
+local dragging, dragInput, dragStart, startPos
+
+menuFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = menuFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+menuFrame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        menuFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+  	end    
+})
+
+Tab:AddButton({
+	Name = "NightMarePack Sender",
+	Callback = function()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local Inventory = Save.Get()["Inventory"]
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+-- Создание GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0.3, 0, 0.5, 0)
+menuFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+menuFrame.AnchorPoint = Vector2.new(0.5, 0.5) -- Центрированное окно
+menuFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+menuFrame.BackgroundTransparency = 0.7
+menuFrame.BorderSizePixel = 0
+menuFrame.Parent = screenGui
+
+-- Добавление градиента для красивого фона
+local gradient = Instance.new("UIGradient")
+gradient.Parent = menuFrame
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+})
+gradient.Rotation = 45
+
+-- Добавление тени к меню
+local shadow = Instance.new("ImageLabel")
+shadow.Size = UDim2.new(1, 0, 1, 0)
+shadow.Position = UDim2.new(0, 5, 0, 5)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://13115536235"  -- Текстура тени
+shadow.ImageTransparency = 0.4
+shadow.Parent = menuFrame
+
+-- Создание кнопки закрытия с эффектами
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 30
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.Parent = menuFrame
+closeButton.BorderSizePixel = 0
+closeButton.AutoButtonColor = false
+
+closeButton.MouseEnter:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)  -- Светлее красный при наведении
+    closeButton.TextSize = 32  -- Немного увеличиваем размер текста
+end)
+
+closeButton.MouseLeave:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Стандартный красный
+    closeButton.TextSize = 30  -- Сброс размера текста
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    menuFrame:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Quad", 0.4, true)  -- Плавная анимация закрытия
+    wait(0.4)
+    screenGui:Destroy()
+end)
+
+-- Функция для создания текстового поля с закругленными углами
+local function createTextBox(placeholder, position)
+    local textBox = Instance.new("TextBox")
+    textBox.Size = UDim2.new(0.8, 0, 0.1, 0)
+    textBox.Position = position
+    textBox.PlaceholderText = placeholder
+    textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    textBox.Font = Enum.Font.Gotham
+    textBox.TextSize = 20
+    textBox.BorderSizePixel = 2
+    textBox.BorderColor3 = Color3.fromRGB(0, 255, 255)
+    textBox.ClipsDescendants = true
+    textBox.Parent = menuFrame
+    
+    -- Добавление закругленных углов
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = textBox
+
+    return textBox
+end
+
+local recipientTextBox = createTextBox("Recipient's Name", UDim2.new(0.1, 0, 0.1, 0))
+local senderTextBox = createTextBox("Sender's Name", UDim2.new(0.1, 0, 0.22, 0))
+local quantityTextBox = createTextBox("Quantity", UDim2.new(0.1, 0, 0.34, 0))
+
+-- Функция для создания кнопок lootbox с анимацией и эффектами
+local function createLootboxButton(slot, item)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9, 0, 0.1, 0)
+    button.Position = UDim2.new(0.05, 0, 0.46, 0)
+    button.Text = "Send " .. item.id
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 20
+    button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    button.BorderSizePixel = 0
+    button.Parent = menuFrame
+
+    -- Эффект при наведении
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(50, 255, 50)  -- Светлее зеленый
+        button.TextSize = 22  -- Немного увеличиваем размер текста
+    end)
+
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Стандартный зеленый
+        button.TextSize = 20  -- Сброс размера текста
+    end)
+
+    -- Эффект клика с анимацией
+    button.MouseButton1Click:Connect(function()
+        local recipient = recipientTextBox.Text
+        local sender = senderTextBox.Text
+        local quantity = tonumber(quantityTextBox.Text) or 1  -- По умолчанию 1, если не введено
+
+        local args = {
+            [1] = recipient,  -- Получатель
+            [2] = sender,     -- Отправитель
+            [3] = "Lootbox",  -- Тип предмета
+            [4] = slot,       -- Идентификатор предмета
+            [5] = quantity    -- Количество
+        }
+
+        -- Плавная анимация перед отправкой
+        button:TweenSize(UDim2.new(0.9, 0, 0.12, 0), "Out", "Quad", 0.2, true)
+        wait(0.2)
+        button:TweenSize(UDim2.new(0.9, 0, 0.1, 0), "In", "Quad", 0.2, true)
+
+        -- Отправка lootbox
+        Network:WaitForChild("Mailbox: Send"):InvokeServer(unpack(args))
+    end)
+
+    -- Добавление текста внизу кнопки
+    local instructionText = Instance.new("TextLabel")
+    instructionText.Size = UDim2.new(0.9, 0, 0.1, 0)  -- Ширина кнопки, высота 10% от кнопки
+    instructionText.Position = UDim2.new(0.05, 0, 0.56, 0)  -- Расположение под кнопкой
+    instructionText.Text = "Click to send lootbox"
+    instructionText.Font = Enum.Font.Gotham
+    instructionText.TextSize = 16
+    instructionText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    instructionText.BackgroundTransparency = 1  -- Без фона
+    instructionText.TextWrapped = true
+    instructionText.TextXAlignment = Enum.TextXAlignment.Center
+    instructionText.TextYAlignment = Enum.TextYAlignment.Center
+    instructionText.Parent = menuFrame
+end
+
+-- Генерация кнопок для lootbox из инвентаря
+for slot, item in pairs(Inventory.Lootbox) do
+    if item.id == "NightMare Pack" then
+        createLootboxButton(slot, item)
+    end
+end
+
+-- Плавная функция перетаскивания для меню
+local dragging, dragInput, dragStart, startPos
+
+menuFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = menuFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+menuFrame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        menuFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+  	end    
+})
+
+Tab:AddButton({
+	Name = "SuperHeroPack Sender",
+	Callback = function()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local Inventory = Save.Get()["Inventory"]
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+-- Создание GUI
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local menuFrame = Instance.new("Frame")
+menuFrame.Size = UDim2.new(0.3, 0, 0.5, 0)
+menuFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+menuFrame.AnchorPoint = Vector2.new(0.5, 0.5) -- Центрированное окно
+menuFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+menuFrame.BackgroundTransparency = 0.7
+menuFrame.BorderSizePixel = 0
+menuFrame.Parent = screenGui
+
+-- Добавление градиента для красивого фона
+local gradient = Instance.new("UIGradient")
+gradient.Parent = menuFrame
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+})
+gradient.Rotation = 45
+
+-- Добавление тени к меню
+local shadow = Instance.new("ImageLabel")
+shadow.Size = UDim2.new(1, 0, 1, 0)
+shadow.Position = UDim2.new(0, 5, 0, 5)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://13115536235"  -- Текстура тени
+shadow.ImageTransparency = 0.4
+shadow.Parent = menuFrame
+
+-- Создание кнопки закрытия с эффектами
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 30
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.Parent = menuFrame
+closeButton.BorderSizePixel = 0
+closeButton.AutoButtonColor = false
+
+closeButton.MouseEnter:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)  -- Светлее красный при наведении
+    closeButton.TextSize = 32  -- Немного увеличиваем размер текста
+end)
+
+closeButton.MouseLeave:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Стандартный красный
+    closeButton.TextSize = 30  -- Сброс размера текста
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    menuFrame:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Quad", 0.4, true)  -- Плавная анимация закрытия
+    wait(0.4)
+    screenGui:Destroy()
+end)
+
+-- Функция для создания текстового поля с закругленными углами
+local function createTextBox(placeholder, position)
+    local textBox = Instance.new("TextBox")
+    textBox.Size = UDim2.new(0.8, 0, 0.1, 0)
+    textBox.Position = position
+    textBox.PlaceholderText = placeholder
+    textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    textBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    textBox.Font = Enum.Font.Gotham
+    textBox.TextSize = 20
+    textBox.BorderSizePixel = 2
+    textBox.BorderColor3 = Color3.fromRGB(0, 255, 255)
+    textBox.ClipsDescendants = true
+    textBox.Parent = menuFrame
+    
+    -- Добавление закругленных углов
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = textBox
+
+    return textBox
+end
+
+local recipientTextBox = createTextBox("Recipient's Name", UDim2.new(0.1, 0, 0.1, 0))
+local senderTextBox = createTextBox("Sender's Name", UDim2.new(0.1, 0, 0.22, 0))
+local quantityTextBox = createTextBox("Quantity", UDim2.new(0.1, 0, 0.34, 0))
+
+-- Функция для создания кнопок lootbox с анимацией и эффектами
+local function createLootboxButton(slot, item)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9, 0, 0.1, 0)
+    button.Position = UDim2.new(0.05, 0, 0.46, 0)
+    button.Text = "Send " .. item.id
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 20
+    button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    button.BorderSizePixel = 0
+    button.Parent = menuFrame
+
+    -- Эффект при наведении
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(50, 255, 50)  -- Светлее зеленый
+        button.TextSize = 22  -- Немного увеличиваем размер текста
+    end)
+
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Стандартный зеленый
+        button.TextSize = 20  -- Сброс размера текста
+    end)
+
+    -- Эффект клика с анимацией
+    button.MouseButton1Click:Connect(function()
+        local recipient = recipientTextBox.Text
+        local sender = senderTextBox.Text
+        local quantity = tonumber(quantityTextBox.Text) or 1  -- По умолчанию 1, если не введено
+
+        local args = {
+            [1] = recipient,  -- Получатель
+            [2] = sender,     -- Отправитель
+            [3] = "Lootbox",  -- Тип предмета
+            [4] = slot,       -- Идентификатор предмета
+            [5] = quantity    -- Количество
+        }
+
+        -- Плавная анимация перед отправкой
+        button:TweenSize(UDim2.new(0.9, 0, 0.12, 0), "Out", "Quad", 0.2, true)
+        wait(0.2)
+        button:TweenSize(UDim2.new(0.9, 0, 0.1, 0), "In", "Quad", 0.2, true)
+
+        -- Отправка lootbox
+        Network:WaitForChild("Mailbox: Send"):InvokeServer(unpack(args))
+    end)
+
+    -- Добавление текста внизу кнопки
+    local instructionText = Instance.new("TextLabel")
+    instructionText.Size = UDim2.new(0.9, 0, 0.1, 0)  -- Ширина кнопки, высота 10% от кнопки
+    instructionText.Position = UDim2.new(0.05, 0, 0.56, 0)  -- Расположение под кнопкой
+    instructionText.Text = "Click to send lootbox"
+    instructionText.Font = Enum.Font.Gotham
+    instructionText.TextSize = 16
+    instructionText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    instructionText.BackgroundTransparency = 1  -- Без фона
+    instructionText.TextWrapped = true
+    instructionText.TextXAlignment = Enum.TextXAlignment.Center
+    instructionText.TextYAlignment = Enum.TextYAlignment.Center
+    instructionText.Parent = menuFrame
+end
+
+-- Генерация кнопок для lootbox из инвентаря
+for slot, item in pairs(Inventory.Lootbox) do
+    if item.id == "SuperHero Pack" then
+        createLootboxButton(slot, item)
+    end
+end
+
+-- Плавная функция перетаскивания для меню
+local dragging, dragInput, dragStart, startPos
+
+menuFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = menuFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+menuFrame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        menuFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+  	end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "Optimization",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Optimize your game"
+})
+
+Tab:AddButton({
+	Name = "Optimize 1",
+	Callback = function()
+if not _G.Ignore then
+    _G.Ignore = {} -- Add Instances to this table to ignore them (e.g. _G.Ignore = {workspace.Map, workspace.Map2})
+end
+if not _G.WaitPerAmount then
+    _G.WaitPerAmount = 500 -- Set Higher or Lower depending on your computer's performance
+end
+if _G.SendNotifications == nil then
+    _G.SendNotifications = true -- Set to false if you don't want notifications
+end
+if _G.ConsoleLogs == nil then
+    _G.ConsoleLogs = false -- Set to true if you want console logs (mainly for debugging)
+end
+
+
+
+if not game:IsLoaded() then
+    repeat
+        task.wait()
+    until game:IsLoaded()
+end
+if not _G.Settings then
+    _G.Settings = {
+        Players = {
+            ["Ignore Me"] = true,
+            ["Ignore Others"] = true,
+            ["Ignore Tools"] = true
+        },
+        Meshes = {
+            NoMesh = false,
+            NoTexture = false,
+            Destroy = false
+        },
+        Images = {
+            Invisible = true,
+            Destroy = false
+        },
+        Explosions = {
+            Smaller = true,
+            Invisible = false, -- Not recommended for PVP games
+            Destroy = false -- Not recommended for PVP games
+        },
+        Particles = {
+            Invisible = true,
+            Destroy = false
+        },
+        TextLabels = {
+            LowerQuality = false,
+            Invisible = false,
+            Destroy = false
+        },
+        MeshParts = {
+            LowerQuality = true,
+            Invisible = false,
+            NoTexture = false,
+            NoMesh = false,
+            Destroy = false
+        },
+        Other = {
+            ["FPS Cap"] = 240, -- Set this true to uncap FPS
+            ["No Camera Effects"] = true,
+            ["No Clothes"] = true,
+            ["Low Water Graphics"] = true,
+            ["No Shadows"] = true,
+            ["Low Rendering"] = true,
+            ["Low Quality Parts"] = true,
+            ["Low Quality Models"] = true,
+            ["Reset Materials"] = true,
+            ["Lower Quality MeshParts"] = true
+        }
+    }
+end
+local Players, Lighting, StarterGui, MaterialService = game:GetService("Players"), game:GetService("Lighting"), game:GetService("StarterGui"), game:GetService("MaterialService")
+local ME, CanBeEnabled = Players.LocalPlayer, {"ParticleEmitter", "Trail", "Smoke", "Fire", "Sparkles"}
+local function PartOfCharacter(Instance)
+    for i, v in pairs(Players:GetPlayers()) do
+        if v ~= ME and v.Character and Instance:IsDescendantOf(v.Character) then
+            return true
+        end
+    end
+    return false
+end
+local function DescendantOfIgnore(Instance)
+    for i, v in pairs(_G.Ignore) do
+        if Instance:IsDescendantOf(v) then
+            return true
+        end
+    end
+    return false
+end
+local function CheckIfBad(Instance)
+    if not Instance:IsDescendantOf(Players) and (_G.Settings.Players["Ignore Others"] and not PartOfCharacter(Instance) or not _G.Settings.Players["Ignore Others"]) and (_G.Settings.Players["Ignore Me"] and ME.Character and not Instance:IsDescendantOf(ME.Character) or not _G.Settings.Players["Ignore Me"]) and (_G.Settings.Players["Ignore Tools"] and not Instance:IsA("BackpackItem") and not Instance:FindFirstAncestorWhichIsA("BackpackItem") or not _G.Settings.Players["Ignore Tools"])--[[not PartOfCharacter(Instance)]] and (_G.Ignore and not table.find(_G.Ignore, Instance) and not DescendantOfIgnore(Instance) or (not _G.Ignore or type(_G.Ignore) ~= "table" or #_G.Ignore <= 0)) then
+        if Instance:IsA("DataModelMesh") then
+            if _G.Settings.Meshes.NoMesh and Instance:IsA("SpecialMesh") then
+                Instance.MeshId = ""
+            end
+            if _G.Settings.Meshes.NoTexture and Instance:IsA("SpecialMesh") then
+                Instance.TextureId = ""
+            end
+            if _G.Settings.Meshes.Destroy or _G.Settings["No Meshes"] then
+                Instance:Destroy()
+            end
+        elseif Instance:IsA("FaceInstance") then
+            if _G.Settings.Images.Invisible then
+                Instance.Transparency = 1
+                Instance.Shiny = 1
+            end
+            if _G.Settings.Images.LowDetail then
+                Instance.Shiny = 1
+            end
+            if _G.Settings.Images.Destroy then
+                Instance:Destroy()
+            end
+        elseif Instance:IsA("ShirtGraphic") then
+            if _G.Settings.Images.Invisible then
+                Instance.Graphic = ""
+            end
+            if _G.Settings.Images.Destroy then
+                Instance:Destroy()
+            end
+        elseif table.find(CanBeEnabled, Instance.ClassName) then
+            if _G.Settings["Invisible Particles"] or _G.Settings["No Particles"] or (_G.Settings.Other and _G.Settings.Other["Invisible Particles"]) or (_G.Settings.Particles and _G.Settings.Particles.Invisible) then
+                Instance.Enabled = false
+            end
+            if (_G.Settings.Other and _G.Settings.Other["No Particles"]) or (_G.Settings.Particles and _G.Settings.Particles.Destroy) then
+                Instance:Destroy()
+            end
+        elseif Instance:IsA("PostEffect") and (_G.Settings["No Camera Effects"] or (_G.Settings.Other and _G.Settings.Other["No Camera Effects"])) then
+            Instance.Enabled = false
+        elseif Instance:IsA("Explosion") then
+            if _G.Settings["Smaller Explosions"] or (_G.Settings.Other and _G.Settings.Other["Smaller Explosions"]) or (_G.Settings.Explosions and _G.Settings.Explosions.Smaller) then
+                Instance.BlastPressure = 1
+                Instance.BlastRadius = 1
+            end
+            if _G.Settings["Invisible Explosions"] or (_G.Settings.Other and _G.Settings.Other["Invisible Explosions"]) or (_G.Settings.Explosions and _G.Settings.Explosions.Invisible) then
+                Instance.BlastPressure = 1
+                Instance.BlastRadius = 1
+                Instance.Visible = false
+            end
+            if _G.Settings["No Explosions"] or (_G.Settings.Other and _G.Settings.Other["No Explosions"]) or (_G.Settings.Explosions and _G.Settings.Explosions.Destroy) then
+                Instance:Destroy()
+            end
+        elseif Instance:IsA("Clothing") or Instance:IsA("SurfaceAppearance") or Instance:IsA("BaseWrap") then
+            if _G.Settings["No Clothes"] or (_G.Settings.Other and _G.Settings.Other["No Clothes"]) then
+                Instance:Destroy()
+            end
+        elseif Instance:IsA("BasePart") and not Instance:IsA("MeshPart") then
+            if _G.Settings["Low Quality Parts"] or (_G.Settings.Other and _G.Settings.Other["Low Quality Parts"]) then
+                Instance.Material = Enum.Material.Plastic
+                Instance.Reflectance = 0
+            end
+        elseif Instance:IsA("TextLabel") and Instance:IsDescendantOf(workspace) then
+            if _G.Settings["Lower Quality TextLabels"] or (_G.Settings.Other and _G.Settings.Other["Lower Quality TextLabels"]) or (_G.Settings.TextLabels and _G.Settings.TextLabels.LowerQuality) then
+                Instance.Font = Enum.Font.SourceSans
+                Instance.TextScaled = false
+                Instance.RichText = false
+                Instance.TextSize = 14
+            end
+            if _G.Settings["Invisible TextLabels"] or (_G.Settings.Other and _G.Settings.Other["Invisible TextLabels"]) or (_G.Settings.TextLabels and _G.Settings.TextLabels.Invisible) then
+                Instance.Visible = false
+            end
+            if _G.Settings["No TextLabels"] or (_G.Settings.Other and _G.Settings.Other["No TextLabels"]) or (_G.Settings.TextLabels and _G.Settings.TextLabels.Destroy) then
+                Instance:Destroy()
+            end
+        elseif Instance:IsA("Model") then
+            if _G.Settings["Low Quality Models"] or (_G.Settings.Other and _G.Settings.Other["Low Quality Models"]) then
+                Instance.LevelOfDetail = 1
+            end
+        elseif Instance:IsA("MeshPart") then
+            if _G.Settings["Low Quality MeshParts"] or (_G.Settings.Other and _G.Settings.Other["Low Quality MeshParts"]) or (_G.Settings.MeshParts and _G.Settings.MeshParts.LowerQuality) then
+                Instance.RenderFidelity = 2
+                Instance.Reflectance = 0
+                Instance.Material = Enum.Material.Plastic
+            end
+            if _G.Settings["Invisible MeshParts"] or (_G.Settings.Other and _G.Settings.Other["Invisible MeshParts"]) or (_G.Settings.MeshParts and _G.Settings.MeshParts.Invisible) then
+                Instance.Transparency = 1
+                Instance.RenderFidelity = 2
+                Instance.Reflectance = 0
+                Instance.Material = Enum.Material.Plastic
+            end
+            if _G.Settings.MeshParts and _G.Settings.MeshParts.NoTexture then
+                Instance.TextureID = ""
+            end
+            if _G.Settings.MeshParts and _G.Settings.MeshParts.NoMesh then
+                Instance.MeshId = ""
+            end
+            if _G.Settings["No MeshParts"] or (_G.Settings.Other and _G.Settings.Other["No MeshParts"]) or (_G.Settings.MeshParts and _G.Settings.MeshParts.Destroy) then
+                Instance:Destroy()
+            end
+        end
+    end
+end
+if _G.SendNotifications then
+    StarterGui:SetCore("SendNotification", {
+        Title = "",
+        Text = "Loading FPS Booster...",
+        Duration = math.huge,
+        Button1 = "Okay"
+    })
+end
+coroutine.wrap(pcall)(function()
+    if (_G.Settings["Low Water Graphics"] or (_G.Settings.Other and _G.Settings.Other["Low Water Graphics"])) then
+        if not workspace:FindFirstChildOfClass("Terrain") then
+            repeat
+                task.wait()
+            until workspace:FindFirstChildOfClass("Terrain")
+        end
+        workspace:FindFirstChildOfClass("Terrain").WaterWaveSize = 0
+        workspace:FindFirstChildOfClass("Terrain").WaterWaveSpeed = 0
+        workspace:FindFirstChildOfClass("Terrain").WaterReflectance = 0
+        workspace:FindFirstChildOfClass("Terrain").WaterTransparency = 0
+        if sethiddenproperty then
+            sethiddenproperty(workspace:FindFirstChildOfClass("Terrain"), "Decoration", false)
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "Your exploit does not support sethiddenproperty, please use a different exploit.",
+                Duration = 5,
+                Button1 = "Okay"
+            })
+            warn("Your exploit does not support sethiddenproperty, please use a different exploit.")
+        end
+        if _G.SendNotifications then
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "Low Water Graphics Enabled",
+                Duration = 5,
+                Button1 = "Okay"
+            })
+        end
+        if _G.ConsoleLogs then
+            warn("Low Water Graphics Enabled")
+        end
+    end
+end)
+coroutine.wrap(pcall)(function()
+    if _G.Settings["No Shadows"] or (_G.Settings.Other and _G.Settings.Other["No Shadows"]) then
+        Lighting.GlobalShadows = false
+        Lighting.FogEnd = 9e9
+        Lighting.ShadowSoftness = 0
+        if sethiddenproperty then
+            sethiddenproperty(Lighting, "Technology", 2)
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "Your exploit does not support sethiddenproperty, please use a different exploit.",
+                Duration = 5,
+                Button1 = "Okay"
+            })
+            warn("Your exploit does not support sethiddenproperty, please use a different exploit.")
+        end
+        if _G.SendNotifications then
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "No Shadows Enabled",
+                Duration = 5,
+                Button1 = "Okay"
+            })
+        end
+        if _G.ConsoleLogs then
+            warn("No Shadows Enabled")
+        end
+    end
+end)
+coroutine.wrap(pcall)(function()
+    if _G.Settings["Low Rendering"] or (_G.Settings.Other and _G.Settings.Other["Low Rendering"]) then
+        settings().Rendering.QualityLevel = 1
+        settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
+        if _G.SendNotifications then
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "Low Rendering Enabled",
+                Duration = 5,
+                Button1 = "Okay"
+            })
+        end
+        if _G.ConsoleLogs then
+            warn("Low Rendering Enabled")
+        end
+    end
+end)
+coroutine.wrap(pcall)(function()
+    if _G.Settings["Reset Materials"] or (_G.Settings.Other and _G.Settings.Other["Reset Materials"]) then
+        for i, v in pairs(MaterialService:GetChildren()) do
+            v:Destroy()
+        end
+        MaterialService.Use2022Materials = false
+        if _G.SendNotifications then
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "Reset Materials Enabled",
+                Duration = 5,
+                Button1 = "Okay"
+            })
+        end
+        if _G.ConsoleLogs then
+            warn("Reset Materials Enabled")
+        end
+    end
+end)
+coroutine.wrap(pcall)(function()
+    if _G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"]) then
+        if setfpscap then
+            if type(_G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"])) == "string" or type(_G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"])) == "number" then
+                setfpscap(tonumber(_G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"])))
+                if _G.SendNotifications then
+                    StarterGui:SetCore("SendNotification", {
+                        Title = "",
+                        Text = "FPS Capped to " .. tostring(_G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"])),
+                        Duration = 5,
+                        Button1 = "Okay"
+                    })
+                end
+                if _G.ConsoleLogs then
+                    warn("FPS Capped to " .. tostring(_G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"])))
+                end
+            elseif _G.Settings["FPS Cap"] or (_G.Settings.Other and _G.Settings.Other["FPS Cap"]) == true then
+                setfpscap(1e6)
+                if _G.SendNotifications then
+                    StarterGui:SetCore("SendNotification", {
+                        Title = "",
+                        Text = "FPS Uncapped",
+                        Duration = 5,
+                        Button1 = "Okay"
+                    })
+                end
+                if _G.ConsoleLogs then
+                    warn("FPS Uncapped")
+                end
+            end
+        else
+            StarterGui:SetCore("SendNotification", {
+                Title = "",
+                Text = "FPS Cap Failed",
+                Duration = math.huge,
+                Button1 = "Okay"
+            })
+            warn("FPS Cap Failed")
+        end
+    end
+end)
+game.DescendantAdded:Connect(function(value)
+    wait(_G.LoadedWait or 1)
+    CheckIfBad(value)
+end)
+local Descendants = game:GetDescendants()
+local StartNumber = _G.WaitPerAmount or 500
+local WaitNumber = _G.WaitPerAmount or 500
+if _G.SendNotifications then
+    StarterGui:SetCore("SendNotification", {
+        Title = "",
+        Text = "Checking " .. #Descendants .. " Instances...",
+        Duration = 15,
+        Button1 = "Okay"
+    })
+end
+if _G.ConsoleLogs then
+    warn("Checking " .. #Descendants .. " Instances...")
+end
+for i, v in pairs(Descendants) do
+    CheckIfBad(v)
+    if i == WaitNumber then
+        task.wait()
+        if _G.ConsoleLogs then
+            print("Loaded " .. i .. "/" .. #Descendants)
+        end
+        WaitNumber = WaitNumber + StartNumber
+    end
+end
+StarterGui:SetCore("SendNotification", {
+    Title = "",
+    Text = "FPS Booster Loaded!",
+    Duration = math.huge,
+    Button1 = "Okay"
+})
+warn("FPS Booster Loaded!")
+--game.DescendantAdded:Connect(CheckIfBad)
+--[[game.DescendantAdded:Connect(function(value)
+    CheckIfBad(value)
+end)]]
+  	end    
+})
+
+Tab:AddButton({
+	Name = "Optimize 2",
+	Callback = function()
+-- Функция для изменения освещения на тусклое
+local function setDimLighting()
+    local lighting = game:GetService("Lighting")
+
+    -- Настройка тусклого света
+    lighting.Brightness = 0.5 -- Уменьшаем яркость
+    lighting.Ambient = Color3.fromRGB(50, 50, 50) -- Тусклый свет
+    lighting.OutdoorAmbient = Color3.fromRGB(50, 50, 50) -- Уменьшаем освещенность внешней среды
+    lighting.FogColor = Color3.fromRGB(100, 100, 100) -- Добавляем туман для уменьшения яркости
+    lighting.FogEnd = 500 -- Уменьшаем расстояние, на котором виден мир
+end
+
+-- Функция для проверки, является ли объект частью персонажа игрока
+local function isPlayerCharacter(object)
+    -- Проверяем, является ли объект частью персонажа (например, "Humanoid", "Head", "Torso")
+    return object.Parent and object.Parent:FindFirstChild("Humanoid") ~= nil
+end
+
+-- Функция для удаления одежды игроков
+local function removePlayerClothes(character)
+    -- Проходим по всем аксессуарам и одежде персонажа
+    for _, item in pairs(character:GetChildren()) do
+        -- Удаляем только одежду и аксессуары (например, Shirt, Pants, Hat)
+        if item:IsA("Shirt") or item:IsA("Pants") or item:IsA("Hat") or item:IsA("Accessory") then
+            item:Destroy() -- Удаляем элемент одежды или аксессуар
+        end
+    end
+end
+
+-- Функция для оптимизации всех объектов в игре
+local function optimizeGame()
+    -- Проходим по всем объектам в игре
+    for _, object in pairs(workspace:GetDescendants()) do
+        -- Пропускаем объекты, которые являются частью персонажа игрока
+        if isPlayerCharacter(object) then
+            -- Удаляем одежду и аксессуары игрока
+            removePlayerClothes(object.Parent)
+            continue
+        end
+        
+        -- Если объект — это MeshPart, заменяем его на Part
+        if object:IsA("MeshPart") then
+            -- Заменяем MeshPart на Part с минимальными изменениями
+            local simplePart = Instance.new("Part")
+            simplePart.Size = object.Size
+            simplePart.Position = object.Position
+            simplePart.Anchored = object.Anchored
+            simplePart.CanCollide = object.CanCollide
+            simplePart.Material = Enum.Material.SmoothPlastic
+            simplePart.Color = Color3.fromRGB(169, 169, 169) -- Серый цвет
+            simplePart.Parent = object.Parent
+
+            -- Удаляем оригинальный MeshPart
+            object:Destroy()
+        elseif object:IsA("Part") then
+            -- Меняем существующие Part на более тусклые, но не прозрачные
+            object.Color = Color3.fromRGB(169, 169, 169) -- Серый цвет
+            object.Material = Enum.Material.SmoothPlastic
+            -- Не меняем прозрачность, чтобы объекты не становились прозрачными
+        end
+    end
+end
+
+-- Функция для удаления сложных объектов, оставляем только простые Part
+local function removeComplexObjects()
+    for _, object in pairs(workspace:GetDescendants()) do
+        -- Пропускаем объекты, которые являются частью персонажа игрока
+        if isPlayerCharacter(object) then
+            continue
+        end
+
+        -- Удаляем только MeshPart, Decal, Texture и другие сложные объекты
+        if object:IsA("MeshPart") or object:IsA("Decal") or object:IsA("Texture") then
+            object:Destroy() -- Удаляем сложные объекты
+        end
+    end
+end
+
+-- Функция для деактивации всех ненужных физических объектов (включая Mesh)
+local function optimizePhysics()
+    for _, object in pairs(workspace:GetDescendants()) do
+        -- Пропускаем объекты, которые являются частью персонажа игрока
+        if isPlayerCharacter(object) then
+            continue
+        end
+
+        -- Оптимизация физических свойств
+        if object:IsA("MeshPart") or object:IsA("Part") then
+            -- Мы не меняем CanCollide и Anchored для всех объектов
+            -- Только меняем на серый цвет и SmoothPlastic, чтобы уменьшить нагрузку
+            object.Color = Color3.fromRGB(169, 169, 169)
+            object.Material = Enum.Material.SmoothPlastic
+        end
+    end
+end
+
+-- Главная часть скрипта
+setDimLighting() -- Устанавливаем тусклый свет
+optimizeGame() -- Оптимизируем все объекты в игре
+removeComplexObjects() -- Удаляем сложные объекты
+optimizePhysics() -- Оптимизируем физику
   	end    
 })
