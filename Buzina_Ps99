@@ -1750,5 +1750,6 @@ while true do
 		end --if dakika 60 end
 
 		timerlabel.Text = saat..":"..dakika..":"..saniye
-	end   
+	end
+end   
 })
