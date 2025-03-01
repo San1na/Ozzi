@@ -748,7 +748,7 @@ end
 
 -- Генерация кнопок для lootbox из инвентаря
 for slot, item in pairs(Inventory.Lootbox) do
-    if item.id == "NightMare Pack" then
+    if item.id == "Nightmare Pack" then
         createLootboxButton(slot, item)
     end
 end
