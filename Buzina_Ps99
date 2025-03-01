@@ -1753,3 +1753,39 @@ while true do
 	end
 end   
 })
+
+local Section = Tab:AddSection({
+	Name = "Plants"
+})
+
+Tab:AddToggle({
+	Name = "AutoPlant",
+	Default = false,
+	Callback = function(Value)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Функция для выполнения всех действий: посев, мгновенный рост и сбор
+local function plantAndCollect()
+    local plots = {6, 5, 2, 3, 4} 
+    
+    for _, plot in ipairs(plots) do
+        
+        local plantArgs = {"FlowerGarden", "PlantSeed", plot, "Diamond"}
+        ReplicatedStorage:WaitForChild("Network"):WaitForChild("Instancing_InvokeCustomFromClient"):InvokeServer(unpack(plantArgs))
+        
+        -- Мгновенный рост
+        local growArgs = {"FlowerGarden", "InstaGrowSeed", plot}
+        ReplicatedStorage:WaitForChild("Network"):WaitForChild("Instancing_InvokeCustomFromClient"):InvokeServer(unpack(growArgs))
+        
+        -- Сбор урожая
+        local collectArgs = {"FlowerGarden", "ClaimPlant", plot}
+        ReplicatedStorage:WaitForChild("Network"):WaitForChild("Instancing_FireCustomFromClient"):FireServer(unpack(collectArgs))
+    end
+end
+
+while true do
+    plantAndCollect()
+    wait(0)  
+end
+	end    
+})
