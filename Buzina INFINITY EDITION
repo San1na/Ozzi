@@ -511,28 +511,34 @@ while true do
   	end    
 })
 
+Tab:AddButton({
+	Name = "Destroy Gui",
+	Callback = function()
+OrionLib:Destroy()
+  	end    
+})
+
 local Tab = Window:MakeTab({
-	Name = "Valentine",
+	Name = "Kraken",
 	Icon = "rbxassetid://11752855970",
 	TestersOnly = false
 })
 
-local VAutoRoll = false  -- Флаг для остановки цикла
+local Autoclaim = false  -- Флаг для остановки цикла
 
 Tab:AddToggle({
-	Name = "Valentine Board AutoRoll",
+	Name = "AutoClaim",
 	Default = false,
 	Callback = function(Value)
-        VAutoRoll = Value  -- Устанавливаем значение флага
-        if VAutoRoll then
+        Autoclaim = Value  -- Устанавливаем значение флага
+        if Autoclaim then
             task.spawn(function()  -- Запускаем в отдельном потоке, чтобы не зависала игра
-    local args = {"Valentines"}
     local replicatedStorage = game:GetService("ReplicatedStorage")
     local network = replicatedStorage:WaitForChild("Network")
-    local boardRoll = network:WaitForChild("Board_Roll")
+    local Fishing_FishermanClaim = network:WaitForChild("Fishing_FishermanClaim")
     
-    while VAutoRoll do
-        boardRoll:InvokeServer(unpack(args))
+    while Autoclaim do
+        Fishing_FishermanClaim:InvokeServer()
         wait(0.5)  -- Ожидание 0.75 секунды перед следующим вызовом
                 end
             end)
