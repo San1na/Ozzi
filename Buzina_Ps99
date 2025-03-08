@@ -2,204 +2,76 @@ local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
 local Window = OrionLib:MakeWindow({Name = "💕Buzina😘", TestMode = true, SaveConfig = true, ConfigFolder = "Buzina"})
 
 local Tab = Window:MakeTab({
-	Name = "Event",
-	Icon = "rbxassetid://4483345998",
-	TestersOnly = false
+    Name = "Event",
+    Icon = "rbxassetid://4483345998",
+    TestersOnly = false
 })
 
 local Section = Tab:AddSection({
-	Name = "Open"
+    Name = "AutoSecretKey"
 })
 
-local autoRolling = false
-local rollingTask
+local autoUseActive = false -- Переменная для отслеживания состояния
 
 Tab:AddToggle({
-	Name = "AutoUnpack Card (Retro)",
-	Default = false,
-	Callback = function(Value)
-		autoRolling = Value
+    Name = "AutoUse",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            autoUseActive = true -- Активируем работу
 
-		if autoRolling then
-		    rollingTask = task.spawn(function()
-		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		        local Save = require(ReplicatedStorage.Library.Client.Save)
-		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+            local replicatedStorage = game:GetService("ReplicatedStorage")
+            local network = replicatedStorage:WaitForChild("Network")
 
-		        while autoRolling do
-		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
-		            for i, v in pairs(Inventory.Lootbox) do
-		                if v.id == "Retro Pack" then
-		                    local args = {
-		                        [1] = i,
-		                        [2] = 8
-		                    }
+            -- Часть 1: Вызов функции для открытия секретной комнаты
+            local remoteFunction = network:WaitForChild("SecretRoom_Unlock")
+            local args = { "Treehouse Merchant" }
 
-		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
-		                end
-		            end
-		            task.wait(0.5)
-		        end
-		    end)
-		else
-		    if rollingTask then
-		        task.cancel(rollingTask)
-		    end
-		end
-	end
-})
-
-Tab:AddToggle({
-	Name = "AutoUnpack Card (Fantasy)",
-	Default = false,
-	Callback = function(Value)
-		autoRolling = Value
-
-		if autoRolling then
-		    rollingTask = task.spawn(function()
-		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		        local Save = require(ReplicatedStorage.Library.Client.Save)
-		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
-
-		        while autoRolling do
-		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
-		            for i, v in pairs(Inventory.Lootbox) do
-		                if v.id == "Fantasy Pack" then
-		                    local args = {
-		                        [1] = i,
-		                        [2] = 8
-		                    }
-
-		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
-		                end
-		            end
-		            task.wait(0.5)
-		        end
-		    end)
-		else
-		    if rollingTask then
-		        task.cancel(rollingTask)
-		    end
-		end
-	end
-})
-
-Tab:AddToggle({
-	Name = "AutoUnpack Card (SuperHero)",
-	Default = false,
-	Callback = function(Value)
-		autoRolling = Value
-
-		if autoRolling then
-		    rollingTask = task.spawn(function()
-		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		        local Save = require(ReplicatedStorage.Library.Client.Save)
-		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
-
-		        while autoRolling do
-		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
-		            for i, v in pairs(Inventory.Lootbox) do
-		                if v.id == "SuperHero Pack" then
-		                    local args = {
-		                        [1] = i,
-		                        [2] = 8
-		                    }
-
-		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
-		                end
-		            end
-		            task.wait(0.5)
-		        end
-		    end)
-		else
-		    if rollingTask then
-		        task.cancel(rollingTask)
-		    end
-		end
-	end
-})
-
-Tab:AddToggle({
-	Name = "AutoUnpack Card (NightMare)",
-	Default = false,
-	Callback = function(Value)
-		autoRolling = Value
-
-		if autoRolling then
-		    rollingTask = task.spawn(function()
-		        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		        local Save = require(ReplicatedStorage.Library.Client.Save)
-		        local RNS = game:GetService("ReplicatedStorage"):WaitForChild("Network")
-
-		        while autoRolling do
-		            local Inventory: any = Save.Get()["Inventory"] -- Обновление инвентаря перед каждой итерацией
-		            for i, v in pairs(Inventory.Lootbox) do
-		                if v.id == "NightMare Pack" then
-		                    local args = {
-		                        [1] = i,
-		                        [2] = 8
-		                    }
-
-		                    RNS:WaitForChild("Lootbox: Open"):InvokeServer(unpack(args))
-		                end
-		            end
-		            task.wait(0.5)
-		        end
-		    end)
-		else
-		    if rollingTask then
-		        task.cancel(rollingTask)
-		    end
-		end
-	end
-})
-
-
-Tab:AddButton({
-	Name = "FastOpen Method",
-	Callback = function()
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local directory = ReplicatedStorage:FindFirstChild("__DIRECTORY")
-
-if directory then
-    local lootboxes = directory:FindFirstChild("Lootboxes")
-    if lootboxes then
-        local cardPacks = lootboxes:FindFirstChild("CardPacks")
-        if cardPacks then
-            local packNames = {"Retro Pack", "Fantasy Pack", "NightMare", "SuperHero"}
-            local objectsToDelete = {
-                "InitialPoses",
-                "AnimSaves",
-                "cardpack_back_A_mesh",
-                "cardpack_back_B_mesh",
-                "cardpack_front_mesh",
-                "RootPart"
-            }
-            
-            for _, packName in ipairs(packNames) do
-                local pack = cardPacks:FindFirstChild(packName)
-                if pack then
-                    local model = pack:FindFirstChild("Model")
-                    if model then
-                        for _, objName in ipairs(objectsToDelete) do
-                            local obj = model:FindFirstChild(objName)
-                            if obj then
-                                obj:Destroy()
-                            end
-                        end
-                    end
+            -- Часть 2: Покупка у Treehouse Merchant
+            local function startAutoUse()
+                while autoUseActive do
+                    remoteFunction:InvokeServer(unpack(args))
+                    wait(0.1) -- Ждем 0.1 секунды перед следующим вызовом
                 end
             end
+
+            -- Часть 3: Покупка у Treehouse Merchant
+            local function purchase()
+                while autoUseActive do
+                    spawn(function()
+                        local purchaseArgs = { 3 }
+                        network:WaitForChild("TreehouseMerchant_Purchase"):InvokeServer(unpack(purchaseArgs))
+                    end)
+                    wait(0.1) -- Подождать 0.1 секунды перед следующим циклом
+                end
+            end
+
+            -- Часть 4: Телепортация к целевому объекту
+            local targetObject = workspace.__THINGS.Instances.TreehouseMerchant.Teleports.Enter
+            local function teleport()
+                while autoUseActive do
+                    if targetObject then
+                        -- Телепортируем к целевому объекту
+                        script.Parent.Position = targetObject.Position
+                    end
+                    wait(4) -- Ждем 4 секунды перед следующей телепортацией
+                end
+            end
+
+            -- Запуск всех функций
+            spawn(startAutoUse)
+            spawn(purchase)
+            spawn(teleport)
+        else
+            autoUseActive = false -- Останавливаем все циклы
         end
-    end
-end
-  	end    
+    end    
 })
 
 local Tab = Window:MakeTab({
 	Name = "Mail",
 	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+	TestersOnly = true
 })
 
 local Section = Tab:AddSection({
