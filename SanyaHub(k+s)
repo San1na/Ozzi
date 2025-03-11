@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
-local Window = OrionLib:MakeWindow({Name = "SanyaHub(OnlyKeys)", TestMode = false, SaveConfig = true, ConfigFolder = "Buzina"})
+local Window = OrionLib:MakeWindow({Name = "SanyaHub(Keys+Wheels)", TestMode = false, SaveConfig = true, ConfigFolder = "Buzina"})
 
 local Tab = Window:MakeTab({
     Name = "Keys",
