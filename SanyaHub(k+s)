@@ -409,6 +409,18 @@ player.CharacterAdded:Connect(onCharacterAdded)
   	end    
 })
 
+Tab:AddButton({
+	Name = "Remove Currency(Gui)",
+	Callback = function()
+local player = game:GetService("Players").LocalPlayer
+local currency = player.PlayerGui.MainLeft.Left:FindFirstChild("Currency")
+
+if currency then
+    currency:Destroy()
+end
+  	end    
+})
+
 local Tab = Window:MakeTab({
     Name = "Other",
     Icon = "rbxassetid://7734021827",
