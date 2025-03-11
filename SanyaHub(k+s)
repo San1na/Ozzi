@@ -1,0 +1,329 @@
+local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
+local Window = OrionLib:MakeWindow({Name = "SanyaHub(Keys+Spinny Wheel)", TestMode = false, SaveConfig = true, ConfigFolder = "Buzina"})
+
+local Tab = Window:MakeTab({
+    Name = "Keys",
+    Icon = "rbxassetid://4483345998",
+    TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "SecretKey"
+})
+
+local autoUseActive = false -- Переменная для отслеживания состояния
+
+Tab:AddToggle({
+    Name = "TreeHouse",
+    Default = false,
+    Callback = function(Value)
+        if Value then
+            autoUseActive = true -- Активируем работу
+
+            local replicatedStorage = game:GetService("ReplicatedStorage")
+            local network = replicatedStorage:WaitForChild("Network")
+
+            -- Часть 1: Вызов функции для открытия секретной комнаты
+            local remoteFunction = network:WaitForChild("SecretRoom_Unlock")
+            local args = { "Treehouse Merchant" }
+
+            -- Часть 2: Покупка у Treehouse Merchant
+            local function startAutoUse()
+                while autoUseActive do
+                    remoteFunction:InvokeServer(unpack(args))
+                    wait(0.1) -- Ждем 0.1 секунды перед следующим вызовом
+                end
+            end
+
+            -- Часть 3: Покупка у Treehouse Merchant
+            local function purchase()
+                while autoUseActive do
+                    spawn(function()
+                        local purchaseArgs = { 3 }
+                        network:WaitForChild("TreehouseMerchant_Purchase"):InvokeServer(unpack(purchaseArgs))
+                    end)
+                    wait(0.1) -- Подождать 0.1 секунды перед следующим циклом
+                end
+            end
+
+            -- Часть 4: Телепортация к целевому объекту
+            local targetObject = workspace.__THINGS.Instances.TreehouseMerchant.Teleports.Enter
+            local function teleport()
+                while autoUseActive do
+                    if targetObject then
+                        -- Телепортируем игрока или объект к целевому объекту
+                        local player = game.Players.LocalPlayer
+                        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                            player.Character.HumanoidRootPart.CFrame = targetObject.CFrame
+                        end
+                    end
+                    wait(4) -- Ждем 4 секунды перед следующей телепортацией
+                end
+            end
+
+            -- Запуск всех функций
+            spawn(startAutoUse)
+            spawn(purchase)
+            spawn(teleport)
+        else
+            autoUseActive = false -- Останавливаем все циклы
+        end
+    end    
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "CrystalKey Spinny Wheel",
+    Default = false,
+    Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+        
+        local rs = game:GetService("ReplicatedStorage")
+        local network = rs:WaitForChild("Network")
+        local player = game.Players.LocalPlayer
+
+        local function unlockAndSpin()
+            local args1 = {"Crystal Key Castle"}
+            network:WaitForChild("SecretRoom_Unlock"):InvokeServer(unpack(args1))
+            
+            local args2 = {"CrystalKeyWheel"}
+            network:WaitForChild("Spinny Wheel: Request Spin"):InvokeServer(unpack(args2))
+        end
+
+        local function teleportTo(part)
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = part.CFrame
+            end
+        end
+        
+        task.spawn(function()
+            while toggleActive do -- Пока флаг активен
+                unlockAndSpin()
+                task.wait(0.1)
+                
+                local enterPart = workspace.__THINGS.Instances.CrystalKeyCastle.Teleports.Enter
+                teleportTo(enterPart)
+                task.wait(0.1)
+                
+                local leavePart = workspace.__THINGS.Instances.CrystalKeyCastle.Teleports.Leave
+                teleportTo(leavePart)
+                task.wait(0.1)
+            end
+        end)
+    end    
+})
+
+local toggleactive = false
+
+Tab:AddToggle({
+	Name = "AutoCraftSecret",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+            
+while toggleActive do
+local args = {
+	1
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("SecretKey_Combine"):InvokeServer(unpack(args))
+task.wait(0.1)
+end
+	end
+})
+
+local Section = Tab:AddSection({
+	Name = "CrystalKey"
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "UseCrystal",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	100
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Crystal_Unlock"):InvokeServer(unpack(args))
+task.wait(0.01)
+end
+	end    
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "AutoCraftCrystal",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	1
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("CrystalKey_Combine"):InvokeServer(unpack(args))
+task.wait(0.1)
+end
+	end    
+})
+
+local Section = Tab:AddSection({
+	Name = "Tech"
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "UseTech",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	100
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Tech_Unlock"):InvokeServer(unpack(args))
+task.wait(0.01)
+end
+	end    
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "AutoCraftTech",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	1
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("TechKey_Combine"):InvokeServer(unpack(args))
+task.wait(0.1)
+end
+	end    
+})
+
+local Section = Tab:AddSection({
+	Name = "Void"
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "UseVoid",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	100
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Void_Unlock"):InvokeServer(unpack(args))
+task.wait(0.01)
+end
+	end    
+})
+
+Tab:AddToggle({
+    Name = "AutoCraftVoid",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	1
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("VoidKey_Combine"):InvokeServer(unpack(args))
+task.wait(0.1)
+end
+	end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "For Streamers,
+	Icon = "rbxassetid://4483345998",
+	TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Ez Soso lelele"
+})
+
+Tab:AddButton({
+	Name = "Ez Moderator",
+	Callback = function()
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local player = Players.LocalPlayer
+
+-- Скрываем таблицу игроков (PlayerList)
+StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.PlayerList, false)
+
+-- Функция скрытия ника над головой
+local function hideNameTag(character)
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None -- Отключаем тег над головой
+    end
+end
+
+-- Функция скрытия скина (делает персонажа полностью прозрачным)
+local function hideSkin(character)
+    task.wait(1) -- Небольшая задержка, чтобы персонаж прогрузился
+
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Transparency = 1 -- Полностью прозрачный персонаж
+            part.Material = Enum.Material.SmoothPlastic -- Убираем блики
+        elseif part:IsA("Decal") or part:IsA("Texture") then
+            part:Destroy() -- Удаляем текстуры
+        elseif part:IsA("Clothing") or part:IsA("ShirtGraphic") then
+            part:Destroy() -- Удаляем одежду
+        elseif part:IsA("Accessory") or part:IsA("CharacterMesh") then
+            part:Destroy() -- Удаляем аксессуары
+        end
+    end
+end
+
+-- Функция, вызываемая при загрузке персонажа
+local function onCharacterAdded(character)
+    hideNameTag(character)
+    hideSkin(character)
+end
+
+-- Запускаем для текущего персонажа
+if player.Character then
+    onCharacterAdded(player.Character)
+end
+
+-- Обновляем при респавне
+player.CharacterAdded:Connect(onCharacterAdded)
+  	end    
+})
