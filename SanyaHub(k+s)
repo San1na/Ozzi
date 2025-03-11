@@ -1,9 +1,9 @@
 local OrionLib = loadstring(game:HttpGet("https://twix.cyou/Orion.txt", true))()
-local Window = OrionLib:MakeWindow({Name = "SanyaHub(Keys+Spinny Wheel)", TestMode = false, SaveConfig = true, ConfigFolder = "Buzina"})
+local Window = OrionLib:MakeWindow({Name = "SanyaHub(OnlyKeys)", TestMode = false, SaveConfig = true, ConfigFolder = "Buzina"})
 
 local Tab = Window:MakeTab({
     Name = "Keys",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://7733965118",
     TestersOnly = false
 })
 
@@ -248,6 +248,8 @@ end
 	end    
 })
 
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
 Tab:AddToggle({
     Name = "AutoCraftVoid",
 	Default = false,
@@ -267,8 +269,87 @@ end
 })
 
 local Tab = Window:MakeTab({
-	Name = "For Streamers,
-	Icon = "rbxassetid://4483345998",
+	Name = "Spinny Wheel",
+	Icon = "rbxassetid://7734086558",
+	TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Wheels"
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "StarterWheel",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	1
+}
+local args = {
+	"StarterWheel"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Spinny Wheel: Request Ticket"):FireServer(unpack(args))
+task.wait(0.1)
+end
+	end    
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "TechWheel",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	1
+}
+local args = {
+	"TechWheel"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Spinny Wheel: Request Ticket"):FireServer(unpack(args))
+task.wait(0.1)
+end
+	end    
+})
+
+local toggleActive = false -- Флаг для отслеживания состояния переключателя
+
+Tab:AddToggle({
+    Name = "VoidWheel",
+	Default = false,
+	Callback = function(Value)
+        toggleActive = Value -- Обновляем состояние
+        
+        if not Value then return end -- Если выключено, не выполняем код
+
+while toggleActive do
+local args = {
+	1
+}
+local args = {
+	"VoidWheel"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Spinny Wheel: Request Ticket"):FireServer(unpack(args))
+task.wait(0.1)
+end
+	end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "For Streamers",
+	Icon = "rbxassetid://7733655755",
 	TestersOnly = false
 })
 
@@ -325,5 +406,22 @@ end
 
 -- Обновляем при респавне
 player.CharacterAdded:Connect(onCharacterAdded)
+  	end    
+})
+
+local Tab = Window:MakeTab({
+    Name = "Other",
+    Icon = "rbxassetid://7734021827",
+    TestersOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Other"
+})
+
+Tab:AddButton({
+	Name = "Destroy Gui",
+	Callback = function()
+OrionLib:Destroy()
   	end    
 })
