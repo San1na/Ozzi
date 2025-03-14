@@ -157,62 +157,6 @@ MainSection:NewToggle("Autobuy Potion Vending Machine", "Automatically buy from 
     end
 end)
 
-
-local Valentine = Window:NewTab("Valentine")
-local ValentineSection = Valentine:NewSection(".")
-
-local VRolling = false
-
-ValentineSection:NewToggle("AutoRoll(Valentine)", "", function(state)
-    VRolling = state
-    local args = {"Valentines"}
-    local replicatedStorage = game:GetService("ReplicatedStorage")
-    local network = replicatedStorage:WaitForChild("Network")
-    local boardRoll = network:WaitForChild("Board_Roll")
-    
-    while VRolling do
-        boardRoll:InvokeServer(unpack(args))
-        wait(0.5)  -- Ожидание 0.75 секунды перед следующим вызовом
-    end
-end)
-
-local Fruit = Window:NewTab("Consume Fruits")
-local FruitSection = Fruit:NewSection(".")
-
-local toggled = false
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Save = require(ReplicatedStorage.Library.Client.Save)
-local RNS = ReplicatedStorage:WaitForChild("Network")
-
-local function consumeFruit(fruitName)
-    spawn(function()
-        while toggled do
-            wait(0.35)
-            local Inventory = Save.Get()["Inventory"]
-            for i, v in pairs(Inventory.Fruit) do
-                if v.id == fruitName then
-                    local args = {
-                        [1] = i,
-                        [2] = 10
-                    }
-                    RNS:WaitForChild("Fruits: Consume"):InvokeServer(unpack(args))
-                end
-            end
-        end
-    end)
-end
-
-FruitSection:NewDropdown("Fruits", "", {"Off", "Apple", "Banana", "Pineapple", "Orange"}, function(currentOption)
-    if currentOption == "Off" then
-        print("Using Disabled")
-        toggled = false  -- Останавливаем цикл
-    else
-        toggled = true
-        print("Executing script for " .. currentOption)
-        consumeFruit(currentOption)
-    end
-end)
-
 local Fish42 = Window:NewTab("Fishing")
 local Fish42Section = Fish42:NewSection(".")
 
