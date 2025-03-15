@@ -175,6 +175,21 @@ LuckSection:NewToggle("AutoCollect", ".", function(state)
     end
 end)
 
+local autoOpening = false
+local function autoOpen()
+    while autoOpening do
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Clovers_HatchEgg"):InvokeServer()
+        wait(0.75) -- небольшой интервал между вызовами
+    end
+end
+
+LuckSection:NewToggle("AutoOpen", ".", function(state)
+    autoOpening = state
+    if state then
+        task.spawn(autoOpen)
+    end
+end)
+
 local Krak = Window:NewTab("Kraken Update")
 local KrakSection = Krak:NewSection(".")
 
