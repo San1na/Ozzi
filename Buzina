@@ -190,6 +190,77 @@ LuckSection:NewToggle("AutoOpen", ".", function(state)
     end
 end)
 
+local platform -- Переменная для хранения платформы
+local farmingEnabled = false -- Переменная для отслеживания состояния автоферма
+
+LuckSection:NewToggle("AutoFarm", ".", function(state)
+    if state then
+        -- Включаем автоферм
+        farmingEnabled = true
+
+        platform = Instance.new("Part")
+        platform.Size = Vector3.new(10, 1, 10) -- Размер платформы
+        platform.Position = Vector3.new(1855, 517, 1959) -- Координаты
+        platform.Anchored = true -- Фиксируем платформу
+        platform.Parent = game.Workspace -- Добавляем в мир
+
+        -- Получаем игрока и его персонажа
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local rootPart = character:WaitForChild("HumanoidRootPart")
+        local humanoid = character:WaitForChild("Humanoid")
+
+        -- Телепортируем игрока на платформу
+        rootPart.CFrame = CFrame.new(platform.Position + Vector3.new(0, 3, 0))
+
+        -- Функция для перемещения случайного клевера
+        local function moveClover()
+            local clovers = workspace.__THINGS.Clovers:GetChildren()
+            if #clovers > 0 then
+                local randomIndex = math.random(1, #clovers)
+                local clover = clovers[randomIndex]
+                
+                if clover:IsA("BasePart") then
+                    clover.Position = rootPart.Position + Vector3.new(0, 3, 0)
+                elseif clover:IsA("Model") and clover.PrimaryPart then
+                    clover:SetPrimaryPartCFrame(rootPart.CFrame + Vector3.new(0, 3, 0))
+                end
+            end
+        end
+
+        -- Функция для прыжков
+        local function jump()
+            if humanoid:GetState() == Enum.HumanoidStateType.Physics then
+                humanoid:Move(Vector3.new(0, 50, 0)) -- Прыжок вверх
+            end
+        end
+
+        -- Запускаем цикл для перемещения клеверов
+        spawn(function()
+            while farmingEnabled do
+                moveClover()
+                wait(0) -- Задержка между перемещениями клеверов
+            end
+        end)
+
+        -- Запускаем цикл для прыжков
+        spawn(function()
+            while farmingEnabled do
+                jump()
+                wait(1) -- Задержка 1 секунда между прыжками
+            end
+        end)
+
+    else
+        -- Выключаем автоферм и удаляем платформу
+        farmingEnabled = false
+        if platform then
+            platform:Destroy() -- Удаляем платформу
+            platform = nil -- Обнуляем переменную
+        end
+    end
+end)
+
 local Krak = Window:NewTab("Kraken Update")
 local KrakSection = Krak:NewSection(".")
 
