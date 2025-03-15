@@ -247,6 +247,8 @@ LuckSection:NewToggle("AutoFarm", ".", function(state)
     end
 end)
 
+local isAutoJumping = false  -- Флаг для отслеживания состояния авто-прыжка
+
 local Krak = Window:NewTab("Kraken Update")
 local KrakSection = Krak:NewSection(".")
 
