@@ -157,6 +157,43 @@ MainSection:NewToggle("Autobuy Potion Vending Machine", "Automatically buy from 
     end
 end)
 
+local Luck = Window:NewTab("Lucki Event")
+local LuckSection = Luck:NewSection(".")
+
+local autoCollecting = false
+local function autoCollect()
+    while autoCollecting do
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Clovers_HopperClaim"):InvokeServer()
+        wait(1) -- небольшой интервал между вызовами
+    end
+end
+
+LuckSection:NewToggle("AutoCollect", ".", function(state)
+    autoCollecting = state
+    if state then
+        task.spawn(autoCollect)
+    end
+end)
+
+local Krak = Window:NewTab("Kraken Update")
+local KrakSection = Krak:NewSection(".")
+
+local Autoclaim = false
+KrakSection:NewToggle("AutoCollect", ".", function(state)
+        if Autoclaim then
+            task.spawn(function()  -- Запускаем в отдельном потоке, чтобы не зависала игра
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+    local network = replicatedStorage:WaitForChild("Network")
+    local Fishing_FishermanClaim = network:WaitForChild("Fishing_FishermanClaim")
+    
+    while Autoclaim do
+        Fishing_FishermanClaim:InvokeServer()
+        wait(0.5)  -- Ожидание 0.75 секунды перед следующим вызовом
+                end
+            end)
+        end
+end)
+
 local Fish42 = Window:NewTab("Fishing")
 local Fish42Section = Fish42:NewSection(".")
 
