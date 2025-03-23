@@ -19,7 +19,8 @@ MainSection:NewToggle("Farm(Not Auto)", ".", function(state)
             local targetMeshIds = {
                 "rbxassetid://108190463667826",
                 "rbxassetid://108190463667826",
-                "rbxassetid://110373471085083"
+                "rbxassetid://110373471085083",
+                "rbxassetid://103544790460474"
             }
 
             for _, part in ipairs(folder:GetChildren()) do
@@ -39,6 +40,36 @@ MainSection:NewToggle("Farm(Not Auto)", ".", function(state)
         end
     end
 end)
+
+local farming = false
+
+MainSection:NewToggle("1Farm(Not Auto)", ".", function(state)
+    farming = state
+    if farming then
+        while farming do
+            local folder = workspace.__THINGS.BlockWorlds.Blocks_5
+            local targetMeshIds = {
+                "rbxassetid://76036505993454"
+            }
+
+            for _, part in ipairs(folder:GetChildren()) do
+                -- Проверяем, является ли объект MeshPart
+                if part:IsA("MeshPart") then
+                    -- Проверяем, что MeshId объекта совпадает с одним из указанных
+                    for _, meshId in ipairs(targetMeshIds) do
+                        if part.MeshId == meshId then
+                            -- Устанавливаем прозрачность на 75%
+                            part.Transparency = 1
+                            break
+                        end
+                    end
+                end
+            end
+            task.wait(1)
+        end
+    end
+end)
+
 
 local isFarmingActive = false  -- Флаг для отслеживания состояния Toggle
 
@@ -110,6 +141,27 @@ for _, part in ipairs(folder:GetChildren()) do
         end
     end
 end
+end)
+
+MainSection:NewButton("1Return", ",", function()
+            local folder = workspace.__THINGS.BlockWorlds.Blocks_5
+            local targetMeshIds = {
+                "rbxassetid://76036505993454"
+            }
+
+            for _, part in ipairs(folder:GetChildren()) do
+                -- Проверяем, является ли объект MeshPart
+                if part:IsA("MeshPart") then
+                    -- Проверяем, что MeshId объекта совпадает с одним из указанных
+                    for _, meshId in ipairs(targetMeshIds) do
+                        if part.MeshId == meshId then
+                            -- Устанавливаем прозрачность на 75%
+                            part.Transparency = 0
+                            break
+                        end
+                    end
+                end
+            end
 end)
 
 MainSection:NewButton("ButtonText", "ButtonInfo", function()
