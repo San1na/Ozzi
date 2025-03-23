@@ -141,7 +141,7 @@ MainSection:NewToggle("AutoFarm Ores", ".", function(state)
     if isFarmingActive then
         while isFarmingActive do
             teleportToMeshPartsWithDelay()
-            wait(0.5)  -- Ожидание перед следующим циклом
+            wait(1)  -- Ожидание перед следующим циклом
         end
     end
 end)
