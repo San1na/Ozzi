@@ -9,9 +9,34 @@ MainSection:NewKeybind("Turn on-off", ".", Enum.KeyCode.Y, function()
     Library:ToggleUI()
 end)
 
+local autoBuying = false
+
+MainSection:NewToggle("AutuBuy Merchant", ".", function(state)
+    autoBuying = state
+    if state then
+        -- Запуск цикла при активации
+        spawn(function()
+            while autoBuying do
+                local args = {
+                    [1] = "MiningMerchant"
+                }
+
+                for i = 1, 6 do
+                    -- Устанавливаем второй параметр от 1 до 6
+                    args[2] = i
+                    -- Отправляем запрос
+                    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Merchant_RequestPurchase"):InvokeServer(unpack(args))
+                    wait(0.25) -- Задержка между запросами, чтобы избежать перегрузки
+                end
+                wait(1) -- Задержка перед следующим циклом
+            end
+        end)
+    end
+end)
+
 local farming = false
 
-MainSection:NewToggle("Farm(Not Auto)", ".", function(state)
+MainSection:NewToggle("Xray)", ".", function(state)
     farming = state
     if farming then
         while farming do
@@ -43,7 +68,7 @@ end)
 
 local farming = false
 
-MainSection:NewToggle("1Farm(Not Auto)", ".", function(state)
+MainSection:NewToggle("Xray-removes sapphire ore", ".", function(state)
     farming = state
     if farming then
         while farming do
@@ -73,14 +98,15 @@ end)
 
 local isFarmingActive = false  -- Флаг для отслеживания состояния Toggle
 
-MainSection:NewToggle("Farm(Auto)", ".", function(state)
+MainSection:NewToggle("AutoFarm Ores", ".", function(state)
     isFarmingActive = state  -- Устанавливаем флаг в зависимости от состояния Toggle
 
     local player = game.Players.LocalPlayer
     local targetMeshIds = {
         "rbxassetid://139852404530297",
         "rbxassetid://92248474996326",
-        "rbxassetid://139852404530297"
+        "rbxassetid://139852404530297",
+        "rbxassetid://79856862084236"
     }
 
     -- Функция для телепортации с задержкой
@@ -120,12 +146,12 @@ MainSection:NewToggle("Farm(Auto)", ".", function(state)
     end
 end)
 
-MainSection:NewButton("Return", ",", function()
+MainSection:NewButton("Returns blocks", ",", function()
 local folder = workspace.__THINGS.BlockWorlds.Blocks_5
 local targetMeshIds = {
     "rbxassetid://108190463667826",
     "rbxassetid://108190463667826",
-    "rbxassetid://110373471085083"
+    "rbxassetid://110373471085083",
 }
 
 for _, part in ipairs(folder:GetChildren()) do
@@ -143,7 +169,7 @@ for _, part in ipairs(folder:GetChildren()) do
 end
 end)
 
-MainSection:NewButton("1Return", ",", function()
+MainSection:NewButton("Returns Sapphires", ",", function()
             local folder = workspace.__THINGS.BlockWorlds.Blocks_5
             local targetMeshIds = {
                 "rbxassetid://76036505993454"
@@ -163,6 +189,8 @@ MainSection:NewButton("1Return", ",", function()
                 end
             end
 end)
+
+
 
 MainSection:NewButton("ButtonText", "ButtonInfo", function()
 if IY_LOADED and not _G.IY_DEBUG == true then
