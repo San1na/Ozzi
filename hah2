@@ -8,10 +8,8 @@ local gameId = game.PlaceId
 
 -- MeshId блоков, которые нужно сделать невидимыми
 local targetMeshIds = {
-    "rbxassetid://108190463667826",
-    "rbxassetid://110373471085083",
-    "rbxassetid://103544790460474",
-    "rbxassetid://76036505993454"
+    "rbxassetid://139852404530297",
+    "rbxassetid://79856862084236"
 }
 
 local isFarmingActive = true -- Флаг для управления фармом
