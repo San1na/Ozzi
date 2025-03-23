@@ -1,0 +1,130 @@
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+
+local player = Players.LocalPlayer
+local gameId = game.PlaceId
+
+-- MeshId блоков, которые нужно сделать невидимыми
+local targetMeshIds = {
+    "rbxassetid://108190463667826",
+    "rbxassetid://110373471085083",
+    "rbxassetid://103544790460474",
+    "rbxassetid://76036505993454"
+}
+
+local isFarmingActive = true -- Флаг для управления фармом
+
+-- Функция для телепортации к первому парту
+local function teleportToFirstPart()
+    local part = workspace:FindFirstChild("Map2") and workspace.Map2:FindFirstChild("100 | Tech Spawn")
+    if part and part:FindFirstChild("PARTS_LOD") then
+        local miningEnter = part.PARTS_LOD.Model.Mining:FindFirstChild("Enter")
+        if miningEnter then
+            player.Character:SetPrimaryPartCFrame(miningEnter.CFrame)
+        end
+    end
+end
+
+-- Функция для вызова `Teleports_RequestInstanceTeleport`
+local function requestZoneTeleport()
+    local args = { "__Zone_5" }
+    local teleportFunction = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Teleports_RequestInstanceTeleport")
+    teleportFunction:InvokeServer(unpack(args))
+end
+
+-- Функция для телепортации на финальные координаты
+local function teleportToStart()
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character:SetPrimaryPartCFrame(CFrame.new(12054, 18, -3953))
+    end
+end
+
+-- Функция для установки прозрачности блоков (после второго телепорта)
+local function makeBlocksTransparent()
+    local folder = workspace.__THINGS.BlockWorlds.Blocks_5
+    for _, part in ipairs(folder:GetChildren()) do
+        if part:IsA("MeshPart") then
+            for _, meshId in ipairs(targetMeshIds) do
+                if part.MeshId == meshId then
+                    part.Transparency = 1 -- Делаем блок полностью прозрачным
+                    break
+                end
+            end
+        end
+    end
+end
+
+-- Функция для поиска и добычи блоков с ограничением по времени (6 секунд)
+local function mineBlocks()
+    local blocks = workspace.__THINGS.BlockWorlds.Blocks_5:GetChildren()
+    local targetBlocks = {}
+
+    for _, block in ipairs(blocks) do
+        if block:IsA("MeshPart") then
+            for _, meshId in ipairs(targetMeshIds) do
+                if block.MeshId == meshId then
+                    table.insert(targetBlocks, block)
+                    break
+                end
+            end
+        end
+    end
+
+    local startTime = tick() -- Засекаем время начала копания
+
+    for _, block in ipairs(targetBlocks) do
+        if not isFarmingActive or (tick() - startTime) >= 6 then
+            break -- Останавливаем, если прошло 6 секунд
+        end
+        wait(1) -- Задержка перед телепортацией к следующему блоку
+        player.Character:SetPrimaryPartCFrame(block.CFrame)
+    end
+end
+
+-- Функция для перехода на новый сервер
+local function serverHop()
+    local servers = {}
+    local url = "https://games.roblox.com/v1/games/" .. gameId .. "/servers/Public?sortOrder=Asc&limit=100"
+
+    local success, result = pcall(function()
+        return game:HttpGet(url)
+    end)
+
+    if success then
+        local data = HttpService:JSONDecode(result)
+        for _, server in pairs(data.data) do
+            if server.playing < server.maxPlayers and server.id ~= game.JobId then
+                table.insert(servers, server.id)
+            end
+        end
+        if #servers > 0 then
+            TeleportService:TeleportToPlaceInstance(gameId, servers[math.random(1, #servers)], player)
+        else
+            warn("Не найдено подходящих серверов")
+        end
+    else
+        warn("Ошибка получения данных о серверах")
+    end
+end
+
+-- Основная логика выполнения
+local function main()
+    teleportToFirstPart() -- Телепортируем к первому парту
+    wait(3) -- Ждем 3 секунды
+
+    requestZoneTeleport() -- Вызываем `Teleports_RequestInstanceTeleport`
+    wait(2) -- Ждем 2 секунды
+
+    teleportToStart() -- Телепортируем игрока на финальные координаты
+    wait(0.5) -- Ожидание перед изменением блоков
+
+    makeBlocksTransparent() -- Делаем блоки невидимыми
+
+    mineBlocks() -- Даем 6 секунд на копание
+
+    serverHop() -- Переход на новый сервер
+end
+
+main()
