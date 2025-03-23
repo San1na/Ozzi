@@ -16,9 +16,9 @@ local isFarmingActive = true -- Флаг для управления фармо�
 
 -- Функция для телепортации к первому парту
 local function teleportToFirstPart()
-    local part = workspace:FindFirstChild("Map2") and workspace.Map2:FindFirstChild("100 | Tech Spawn")
-    if part and part:FindFirstChild("PARTS_LOD") then
-        local miningEnter = part.PARTS_LOD.Model.Mining:FindFirstChild("Enter")
+    local part = workspace:FindFirstChild("Map") and workspace.Map["1 | Spawn"]
+    if part and part:FindFirstChild("PARTS") then
+        local miningEnter = part.PARTS.Model.Mining:FindFirstChild("Enter")
         if miningEnter then
             player.Character:SetPrimaryPartCFrame(miningEnter.CFrame)
         end
