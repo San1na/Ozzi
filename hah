@@ -56,6 +56,7 @@ MainSection:NewToggle("Xray)", ".", function(state)
                         if part.MeshId == meshId then
                             -- Устанавливаем прозрачность на 75%
                             part.Transparency = 1
+                            part.CanCollide = false  -- Отключаем столкновение, чтобы не блокировать движение
                             break
                         end
                     end
@@ -95,17 +96,178 @@ MainSection:NewToggle("Xray-removes sapphire ore", ".", function(state)
     end
 end)
 
+MainSection:NewToggle("DELETES Xray Blocks", ".", function(state)
+    farming = state
+    if farming then
+        while farming do
+            local folder = workspace.__THINGS.BlockWorlds.Blocks_5
+            local targetMeshIds = {
+                "rbxassetid://108190463667826",
+                "rbxassetid://108190463667826",
+                "rbxassetid://110373471085083",
+                "rbxassetid://103544790460474"
+            }
+
+            for _, part in ipairs(folder:GetChildren()) do
+                -- Проверяем, является ли объект MeshPart
+                if part:IsA("MeshPart") then
+                    -- Проверяем, что MeshId объекта совпадает с одним из указанных
+                    for _, meshId in ipairs(targetMeshIds) do
+                        if part.MeshId == meshId then
+                            -- Удаляем блок
+                            part:Destroy()
+                            break
+                        end
+                    end
+                end
+            end
+            task.wait(1)
+        end
+    end
+end)
 
 local isFarmingActive = false  -- Флаг для отслеживания состояния Toggle
 
-MainSection:NewToggle("AutoFarm Ores", ".", function(state)
+MainSection:NewToggle("AutoFarm Sapphire", ".", function(state)
     isFarmingActive = state  -- Устанавливаем флаг в зависимости от состояния Toggle
 
     local player = game.Players.LocalPlayer
     local targetMeshIds = {
-        "rbxassetid://139852404530297",
-        "rbxassetid://92248474996326",
-        "rbxassetid://139852404530297",
+        "rbxassetid://76036505993454"
+    }
+
+    -- Функция для телепортации с задержкой
+    local function teleportToMeshPartsWithDelay()
+        local blocks = workspace.__THINGS.BlockWorlds.Blocks_5:GetChildren()
+        local targetBlocks = {}
+        
+        -- Сохраняем блоки с нужными MeshId
+        for _, block in ipairs(blocks) do
+            if block:IsA("MeshPart") then
+                for _, meshId in ipairs(targetMeshIds) do
+                    if block.MeshId == meshId then
+                        table.insert(targetBlocks, block)
+                        break
+                    end
+                end
+            end
+        end
+
+        -- Телепортация к каждому блоку с задержкой
+        for _, block in ipairs(targetBlocks) do
+            if not isFarmingActive then  -- Если farming отключен, выходим из цикла
+                break
+            end
+            -- Подождать 1 секунду перед телепортацией
+            wait(0.157)
+            player.Character:SetPrimaryPartCFrame(block.CFrame)
+        end
+    end
+
+    -- Запуск функции, если Toggle активен
+    if isFarmingActive then
+        while isFarmingActive do
+            teleportToMeshPartsWithDelay()
+            wait(0.1)  -- Ожидание перед следующим циклом
+        end
+    end
+end)
+
+MainSection:NewToggle("AutoFarm Ruby", ".", function(state)
+    isFarmingActive = state  -- Устанавливаем флаг в зависимости от состояния Toggle
+
+    local player = game.Players.LocalPlayer
+    local targetMeshIds = {
+        "rbxassetid://92248474996326"
+    }
+
+    -- Функция для телепортации с задержкой
+    local function teleportToMeshPartsWithDelay()
+        local blocks = workspace.__THINGS.BlockWorlds.Blocks_5:GetChildren()
+        local targetBlocks = {}
+        
+        -- Сохраняем блоки с нужными MeshId
+        for _, block in ipairs(blocks) do
+            if block:IsA("MeshPart") then
+                for _, meshId in ipairs(targetMeshIds) do
+                    if block.MeshId == meshId then
+                        table.insert(targetBlocks, block)
+                        break
+                    end
+                end
+            end
+        end
+
+        -- Телепортация к каждому блоку с задержкой
+        for _, block in ipairs(targetBlocks) do
+            if not isFarmingActive then  -- Если farming отключен, выходим из цикла
+                break
+            end
+            -- Подождать 1 секунду перед телепортацией
+            wait(0.157)
+            player.Character:SetPrimaryPartCFrame(block.CFrame)
+        end
+    end
+
+    -- Запуск функции, если Toggle активен
+    if isFarmingActive then
+        while isFarmingActive do
+            teleportToMeshPartsWithDelay()
+            wait(0.1)  -- Ожидание перед следующим циклом
+        end
+    end
+end)
+
+MainSection:NewToggle("AutoFarm Emerald", ".", function(state)
+    isFarmingActive = state  -- Устанавливаем флаг в зависимости от состояния Toggle
+
+    local player = game.Players.LocalPlayer
+    local targetMeshIds = {
+        "rbxassetid://139852404530297"
+    }
+
+    -- Функция для телепортации с задержкой
+    local function teleportToMeshPartsWithDelay()
+        local blocks = workspace.__THINGS.BlockWorlds.Blocks_5:GetChildren()
+        local targetBlocks = {}
+        
+        -- Сохраняем блоки с нужными MeshId
+        for _, block in ipairs(blocks) do
+            if block:IsA("MeshPart") then
+                for _, meshId in ipairs(targetMeshIds) do
+                    if block.MeshId == meshId then
+                        table.insert(targetBlocks, block)
+                        break
+                    end
+                end
+            end
+        end
+
+        -- Телепортация к каждому блоку с задержкой
+        for _, block in ipairs(targetBlocks) do
+            if not isFarmingActive then  -- Если farming отключен, выходим из цикла
+                break
+            end
+            -- Подождать 1 секунду перед телепортацией
+            wait(0.157)
+            player.Character:SetPrimaryPartCFrame(block.CFrame)
+        end
+    end
+
+    -- Запуск функции, если Toggle активен
+    if isFarmingActive then
+        while isFarmingActive do
+            teleportToMeshPartsWithDelay()
+            wait(0.1)  -- Ожидание перед следующим циклом
+        end
+    end
+end)
+
+MainSection:NewToggle("AutoFarm Amethyst", ".", function(state)
+    isFarmingActive = state  -- Устанавливаем флаг в зависимости от состояния Toggle
+
+    local player = game.Players.LocalPlayer
+    local targetMeshIds = {
         "rbxassetid://79856862084236"
     }
 
@@ -132,7 +294,7 @@ MainSection:NewToggle("AutoFarm Ores", ".", function(state)
                 break
             end
             -- Подождать 1 секунду перед телепортацией
-            wait(1)
+            wait(0.157)
             player.Character:SetPrimaryPartCFrame(block.CFrame)
         end
     end
@@ -141,7 +303,7 @@ MainSection:NewToggle("AutoFarm Ores", ".", function(state)
     if isFarmingActive then
         while isFarmingActive do
             teleportToMeshPartsWithDelay()
-            wait(1)  -- Ожидание перед следующим циклом
+            wait(0.1)  -- Ожидание перед следующим циклом
         end
     end
 end)
