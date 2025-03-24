@@ -26,7 +26,7 @@ local function createToggleButton(buttonText, position, craftArgs)
         autoCraftThread = coroutine.create(function()
             while autoCrafting do
                 PetCraftingMachineCraft:InvokeServer(unpack(craftArgs))
-                wait(1)  -- Затримка між викликами (змініть за потребою)
+                wait(0.5)  -- Зменшена затримка (cooldown 0.5 сек)
             end
         end)
         coroutine.resume(autoCraftThread)
