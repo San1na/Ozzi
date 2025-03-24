@@ -1,0 +1,74 @@
+-- Цей скрипт має бути розміщений у StarterGui як LocalScript
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PetCraftingMachineCraft = ReplicatedStorage:WaitForChild("Network"):WaitForChild("PetCraftingMachine_Craft")
+
+-- Створення екранного GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CraftingUI"
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Функція для створення кнопки з перемикачем автокрафту
+local function createToggleButton(buttonText, position, craftArgs)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 200, 0, 50)
+    button.Position = position
+    button.Text = buttonText .. " (OFF)"
+    button.Parent = screenGui
+
+    local autoCrafting = false
+    local autoCraftThread
+
+    local function startAutoCrafting()
+        autoCrafting = true
+        button.Text = buttonText .. " (ON)"
+        -- Запускаємо цикл автокрафту у новій сопрограмі
+        autoCraftThread = coroutine.create(function()
+            while autoCrafting do
+                PetCraftingMachineCraft:InvokeServer(unpack(craftArgs))
+                wait(1)  -- Затримка між викликами (змініть за потребою)
+            end
+        end)
+        coroutine.resume(autoCraftThread)
+    end
+
+    local function stopAutoCrafting()
+        autoCrafting = false
+        button.Text = buttonText .. " (OFF)"
+    end
+
+    button.MouseButton1Click:Connect(function()
+        if not autoCrafting then
+            startAutoCrafting()
+        else
+            stopAutoCrafting()
+        end
+    end)
+
+    return button
+end
+
+-- Аргументи для кожного типу крафту
+local args1 = {
+    [1] = "MiningCraftMachine",
+    [2] = 1,
+    [3] = 54,
+    [4] = { shiny = false, pt = 0 }
+}
+local args2 = {
+    [1] = "MiningCraftMachine",
+    [2] = 2,
+    [3] = 53,
+    [4] = { shiny = false, pt = 0 }
+}
+local args3 = {
+    [1] = "MiningCraftMachine",
+    [2] = 3,
+    [3] = 9,
+    [4] = { shiny = false, pt = 0 }
+}
+
+-- Створення кнопок для кожного типу крафту
+createToggleButton("Craft 1", UDim2.new(0, 10, 0, 10), args1)
+createToggleButton("Craft 2", UDim2.new(0, 10, 0, 70), args2)
+createToggleButton("Craft 3", UDim2.new(0, 10, 0, 130), args3)
