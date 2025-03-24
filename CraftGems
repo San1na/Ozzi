@@ -22,11 +22,10 @@ local function createToggleButton(buttonText, position, craftArgs)
     local function startAutoCrafting()
         autoCrafting = true
         button.Text = buttonText .. " (ON)"
-        -- Запускаємо цикл автокрафту у новій сопрограмі
         autoCraftThread = coroutine.create(function()
             while autoCrafting do
                 PetCraftingMachineCraft:InvokeServer(unpack(craftArgs))
-                wait(0.5)  -- Зменшена затримка (cooldown 0.5 сек)
+                wait(0.5)  -- Зменшена затримка для безпечного автокрафту
             end
         end)
         coroutine.resume(autoCraftThread)
@@ -52,23 +51,30 @@ end
 local args1 = {
     [1] = "MiningCraftMachine",
     [2] = 1,
-    [3] = 54,
+    [3] = 1,
     [4] = { shiny = false, pt = 0 }
 }
 local args2 = {
     [1] = "MiningCraftMachine",
     [2] = 2,
-    [3] = 53,
+    [3] = 1,
     [4] = { shiny = false, pt = 0 }
 }
 local args3 = {
     [1] = "MiningCraftMachine",
     [2] = 3,
-    [3] = 9,
+    [3] = 1,
+    [4] = { shiny = false, pt = 0 }
+}
+local args4 = {
+    [1] = "MiningCraftMachine",
+    [2] = 4,
+    [3] = 1,
     [4] = { shiny = false, pt = 0 }
 }
 
--- Створення кнопок для кожного типу крафту
-createToggleButton("Craft 1", UDim2.new(0, 10, 0, 10), args1)
-createToggleButton("Craft 2", UDim2.new(0, 10, 0, 70), args2)
-createToggleButton("Craft 3", UDim2.new(0, 10, 0, 130), args3)
+-- Створення кнопок із заміненими назвами
+createToggleButton("Ruby Gem", UDim2.new(0, 10, 0, 10), args1)
+createToggleButton("Emerald Gem", UDim2.new(0, 10, 0, 70), args2)
+createToggleButton("Amethyst Gem", UDim2.new(0, 10, 0, 130), args3)
+createToggleButton("Rainbow Gem", UDim2.new(0, 10, 0, 190), args3)
